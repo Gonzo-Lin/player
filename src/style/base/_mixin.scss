@@ -1,0 +1,51 @@
+@charset "utf-8";
+
+/*@include rounded(10px);*/
+@mixin rounded($radius) {
+    -webkit-border-radius: $radius;
+       -moz-border-radius: $radius;
+            border-radius: $radius;
+}
+
+
+/*@include shadow(0, 1px, 2px, rgba(0,0,0,.5));*/
+@mixin shadow($x, $y, $blur, $color:rgba(0,0,0,.1)) {
+  -webkit-box-shadow: $x $y $blur $color;
+     -moz-box-shadow: $x $y $blur $color;
+          box-shadow: $x $y $blur $color;
+}
+/*@include shadow-inset(0, 1px, 2px, rgba(0,0,0,.5));*/
+@mixin shadow-inset($x, $y, $blur, $color) {
+    -webkit-box-shadow: inset $x $y $blur $color;
+       -moz-box-shadow: inset $x $y $blur $color;
+            box-shadow: inset $x $y $blur $color;
+}
+@mixin transition($property) {
+    -webkit-transition: $property .2s ease;
+       -moz-transition: $property .2s ease;
+         -o-transition: $property .2s ease;
+            transition: $property .2s ease;
+}
+/* @include box-sizing(); */
+@mixin box-sizing {
+-webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+        box-sizing: border-box;
+}
+/* @include linear-gradient(#ff70b1, #d42a78); */
+@mixin linear-gradient($from, $to , $direction:0deg) {
+    /* Fallback for sad browsers */
+    background-color: $to;
+    /* Mozilla Firefox */
+    background-image:-moz-linear-gradient($from, $to);
+    /* Opera */
+    background-image:-o-linear-gradient($from, $to);
+    /* WebKit (Chrome 11+) */
+    background-image:-webkit-gradient(linear, left top, right top, color-stop(0, $from), color-stop(1, $to));
+    /* WebKit (Safari 5.1+, Chrome 10+) */
+    background-image: -webkit-linear-gradient($direction, $from, $to);
+    /* IE10 */
+    background-image: -ms-linear-gradient($direction, $from, $to);
+    /* W3C */
+    background-image: linear-gradient($direction, $from, $to);
+}
