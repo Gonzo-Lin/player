@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store/store.js'
 
 Vue.config.productionTip = false
 
@@ -32,6 +33,7 @@ Vue.prototype.ApiPath = ApiPath//挂载到Vue实例上面
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })
