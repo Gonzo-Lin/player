@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-
+import 'typeface-roboto';
 
 import './style/base/_color.scss';
 import './style/base/_mixin.scss';
@@ -24,9 +24,22 @@ import api from "@/api/index";
 
 import ApiPath from "@/api/ApiPath"
 
+import _GLOBAL from "@/config"
+
 
 Vue.prototype.$api = api
 Vue.prototype.ApiPath = ApiPath//挂载到Vue实例上面
+Vue.prototype._GLOBAL = _GLOBAL//挂载到Vue实例上面
+
+
+// 格式化歌曲时间
+Vue.filter('_format_song_time',(value)=>{
+	if (!value) return '0:00';
+	var _minues = parseInt(value / 60),
+	_second = parseInt(value % 60 );
+	return `${_minues}:${_second < 10 ? '0'+_second : _second}`
+})
+
 
 
 /* eslint-disable no-new */
