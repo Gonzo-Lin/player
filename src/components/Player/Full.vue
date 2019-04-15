@@ -41,25 +41,13 @@
 					<p>I can pay for everything</p>
 				</div>
 			</div>
+			
+			<div class="pagination">
 
-			<!-- <div class="music_progress">
-	            <mu-slider color="secondary" v-model="song_time" ref="song_time" @change="_progress_change" id="music_progress"></mu-slider>
-	            <div class="reset_display_value_text" :style="'left:'+song_time+'%'">{{ music_data.current_length | _format_song_time }}</div>
 			</div>
 
-	        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" fill>
-	            <mu-avatar class="mini_player_thumb">
-	                <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000004ex2Wu3qLZvz.jpg?max_age=2592000" alt="Drinking from the Bottle" :class="['img_auto cricle' , is_play ? 'play_start' : 'play_stop']"  />
-	            </mu-avatar>
-	            <div class="mini_player_main">
-	                <h4>Drinking from the Bottle</h4>
-	                <p>Calvin Harris - Tinie Tempah</p>
-	            </div>
-	            <div class="mini_player_btn">
-	                <mu-icon :value=" is_play ? 'pause' : 'play_arrow'" size="36" @click="!is_play ? _play() : _paused()"></mu-icon>
-	                <mu-icon value="queue_music" size="36" @click="_music_list_flag"></mu-icon>
-	            </div>
-	        </mu-flex> -->
+			
+
 		</div>
 	</transition>
 </template>
