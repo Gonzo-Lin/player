@@ -27,34 +27,6 @@
         left: 0;
         right: 0;
         transform: translateY(-50%);
-        /deep/ .mu-slider{
-        	margin-bottom: 0;
-	        &.active.display-value{
-	        	.display-value-text{
-	        		display: none;
-	        	}
-	        	.mu-slider-display-value {
-	        		width: 28px;
-	        		height: 28px;
-	        	}
-	        	& + .reset_display_value_text{
-	        		display: block;
-		        }	
-	        }
-        }
-        .reset_display_value_text{
-        	position: absolute;
-		    top: -26px;
-		    display: none;
-		    width: 26px;
-		    height: 26px;
-		    text-align: center;
-		    line-height: 26px;
-		    font-size: 10px;
-		    color: white;
-		    transform: scale(1) translate(-50%,0);
-        }	
-        
     }
     
     .mini_player_main{
@@ -86,6 +58,7 @@
     bottom: 0;
     z-index: 1;
     background: white;
+    color: white;
     /deep/ .mu-appbar{
         position: sticky;
     }
@@ -142,8 +115,6 @@
         }
     }
     .music_main{
-        color: white;
-        position: sticky;
         h5{
             position: relative;
             display: inline-block;
@@ -167,39 +138,68 @@
             }
         }
         .music_thumb{
-            width: 70%;
-            margin: 30px auto;
-            // padding: 7px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 50%;
-            /*overflow: hidden;*/
-            position: relative;
-            img{
+            margin: 15px auto;
+            .music_thumb_bg{
                 border-radius: 50%;
+                background: rgba(0,0,0,0.3);
                 padding: 7px;
-            }
-            .like,.unlike{
-                position: absolute;
-                top: 50%;
-                border-radius: 50%;
-                font-size: 0;
-                padding: 7px;
-                transform: translate(calc( -50% + 3.5px ),-50%);
-            }
-            .like{
-                left: 0;
-                background: $special;
-            }
-            .unlike{
-                right: 0;
-                background: $border_1;
-                transform: translate(calc( 50% - 3.5px ),-50%);
+                display: inline-block;
+                position: relative;
+                img{
+                    border-radius: 50%;
+                }
+                .like,.unlike{
+                    position: absolute;
+                    top: 50%;
+                    border-radius: 50%;
+                    font-size: 0;
+                    padding: 7px;
+                    transform: translate(calc( -50% + 3.5px ),-50%);
+                }
+                .like{
+                    left: 0;
+                    background: $special;
+                }
+                .unlike{
+                    right: 0;
+                    background: $border_1;
+                    transform: translate(calc( 50% - 3.5px ),-50%);
+                }
             }
         }
     }
 }
 
-
+.music_progress{
+    position: relative;
+    /deep/ .mu-slider{
+        margin-bottom: 0;
+        &.active.display-value{
+            .display-value-text{
+                display: none;
+            }
+            .mu-slider-display-value {
+                width: 28px;
+                height: 28px;
+            }
+            & + .reset_display_value_text{
+                display: block;
+            }   
+        }
+    }
+    .reset_display_value_text{
+        position: absolute;
+        top: -26px;
+        display: none;
+        width: 26px;
+        height: 26px;
+        text-align: center;
+        line-height: 26px;
+        font-size: 10px;
+        color: white;
+        transform: scale(1) translate(-50%,0);
+    }   
+}
 
 
 

@@ -76,3 +76,60 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 export default store;
 ```
+
+#### 播放模式刷新后重置
+play_mode：播放模式 [0,1,2]; // 0: 随机播放, 1: 单曲循环, 2: 列表循环
+
+使用 VueX 保存播放模式后刷新依旧为原始值，
+
+修改播放模式时，将值 play_mode 保存在 localStorage 中，并修改值 play_mode；
+
+VueX 中 getters 时 如果play_mode 为 0， 则从 localStorage 中取值，确保不是原始值 0；
+
+同理，音乐播放状态也可以这么操作
+```
+> store.js
+	
+	state:{
+		// ...
+		play_mode: 0,
+	},
+	getters:{
+		// ...
+		play_mode(state){
+        	if(state.play_mode == 0){
+	            state.play_mode = localStorage.getItem('play_mode');
+	        }
+	        return state.play_mode
+        }
+    },
+    mutations:{
+		// ...
+		_set_play_mode(state,data){
+			// data 为总共有多少种播放模式
+            state.play_mode++; //将传参设置给state的 play_mode
+            if(state.play_mode > data){
+				state.play_mode = 0;
+			}
+            localStorage.setItem("play_mode", state.play_mode);　
+        }
+    }
+
+> ***.vue
+
+	import {mapGetters} from 'vuex';
+
+	computed:{
+		...mapGetters([
+		 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
+		 	'play_mode'
+		])
+	},
+	methods:{
+		_set_play_mode(){
+			var _length = this._GLOBAL.config.play_mode.length-1;
+			this.$store.commit('_set_play_mode',_length);
+		},
+	}
+
+```

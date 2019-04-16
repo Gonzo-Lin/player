@@ -6,7 +6,8 @@ export default{
 			'repeat': '列表循环',
 			'shuffle': '随机播放',
 			'repeat_one': '单曲循环',
-		}
+		},
+		default_play_mode: 0,
 	},
 	style:{
 	},

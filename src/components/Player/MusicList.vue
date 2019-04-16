@@ -36,7 +36,10 @@
 	</transition>
 </template>
 <script>
+	import {mapGetters} from 'vuex';
+
 	import BScroll from 'better-scroll'
+	import eventVue from '../../utils/event.js'
 
 	export default{
 		name: 'music_list',
@@ -58,7 +61,7 @@
 
 				shuffle: !!0,
 				repeat_one: !!0,
-				play_mode: 0,
+
 			}
 		},
 		created(){
@@ -67,10 +70,14 @@
 			// my_audio = document.getElementById("my_audio");
 			this.$nextTick(()=>{
 				// this._get_music_list();
-				// this.$nextTick(()=>{
 					this._init_scroll();
-				// });
 			})
+		},
+		computed:{
+			...mapGetters([
+			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
+			 	'play_mode'
+			])
 		},
 		watch:{
 
@@ -93,13 +100,10 @@
 
 			// 播放模式
 			_play_mode(){
-				if(this.play_mode >= this._GLOBAL.config.play_mode.length-1){
-					this.play_mode = 0;
-					return;
-				}
-				this.play_mode++;
+				var _length = this._GLOBAL.config.play_mode.length-1;
+				this.$store.commit('_set_play_mode',_length);
 			},
-
+			
 			// 隐藏播放列表
 			hide_music_list(){
 				this.$emit('hide_music_list');
@@ -118,6 +122,7 @@
 	left: 0;
 	right: 0;
 	height: 450px;
+	z-index: 9;
 	background: white;
     @include shadow(0px, -8px, 24px,  rgba(0, 0, 0, 0.3));
     @include rounded(8px 8px 0 0);

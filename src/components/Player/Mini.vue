@@ -1,10 +1,12 @@
 <template>
 	<transition name="fade_top">
 		<div class="mini_player" v-show="!MUSIC_LIST_SHOW_FLAG && !FULL_PLAYER_SHOW">
-			<div class="music_progress">
+			<my-progress :music_data="music_data" :_playing="_playing" @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
+			<!-- <div class="music_progress">
 	            <mu-slider color="secondary" v-model="song_time" ref="song_time" @change="_progress_change" id="music_progress"></mu-slider>
 	            <div class="reset_display_value_text" :style="'left:'+song_time+'%'">{{ music_data.current_length | _format_song_time }}</div>
-			</div>
+			</div> -->
+
 
 	        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" fill>
 	            <mu-avatar class="mini_player_thumb" @click.native="_show_full_player">
@@ -24,9 +26,10 @@
 </template>
 
 <script>
+	import MyProgress from '@/components/Player/Progress.vue';
 	import eventVue from '../../utils/event.js';
 
-	var _progress_change_fun=null;
+	// var _progress_change_fun=null;
 	export default{
 		name: 'mini_player',
 		props:{
@@ -56,6 +59,7 @@
 				this.song_time = 'song_time' in this.music_data ? this.music_data.song_time : '0';
 
 				this._show_mini_player();
+				this._get_progress_change();
 			})
 		},
 		watch:{
@@ -76,6 +80,7 @@
 				this.$emit('_paused');
 			},
 			_progress_change(value){
+				/*
 				var _music_progress_id = document.getElementById("music_progress");
 
 				var _re_value = Number((value/100 * this.music_data.total_length).toFixed(2));
@@ -92,7 +97,7 @@
 				_music_progress_id.addEventListener("touchend",_progress_change_fun);
 				
 				this.$emit('_progress_change',_re_value);
-
+				*/
 
 			},
 			_music_list_flag(){
@@ -102,18 +107,34 @@
 			// 是否显示全屏播放器
 			_show_full_player(){
 				this.FULL_PLAYER_SHOW = true
-				eventVue .$emit("_hide_full_player_fun",true)   //$emit这个方法会触发一个事件
+				eventVue.$emit("_hide_full_player_fun",true)   //$emit这个方法会触发一个事件
 			},
 			_show_mini_player(){
-				eventVue .$on("_hide_mini_player",(data)=>{
+				eventVue.$on("_hide_mini_player",(data)=>{
 					// console.log(data);
 					this.FULL_PLAYER_SHOW = data
 				})
+			},
+
+			// 获取 my-progress 组件的时长
+			_get_progress_change(){
+
+				// eventVue.$on("_siblings_get_progress_change",(data)=>{
+				// 	// console.log(data);
+				// 	console.log(data)
+				// 	// this.SHOW_FULL_PLAYER_FLAG = data
+				// })
+			},
+			_siblings_get_progress_change(data){
+				this.$emit('_progress_change',data);
 			}
 		},
 		filters:{
 			
 		},
+		components:{
+			MyProgress
+		}
 	}
 </script>
 

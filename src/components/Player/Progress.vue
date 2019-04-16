@@ -1,6 +1,6 @@
 <template>
     <div class="music_progress">
-        <mu-slider color="secondary" v-model="song_time" ref="song_time" @change="_progress_change" id="music_progress"></mu-slider>
+        <mu-slider color="secondary" v-model="song_time" ref="song_time" @change="_progress_change" class="music_progress_wrap"></mu-slider>
         <div class="reset_display_value_text" :style="'left:'+song_time+'%'">{{ music_data.current_length | _format_song_time }}</div>
     </div>
 </template>
@@ -8,12 +8,16 @@
 <script>
 var _progress_change_fun=null;
 export default{
-    name: 'progress',
+    name: 'my-progress',
     props:{
         music_data:{
             type: Object,
             value: {},
-        }
+        },
+        _playing:{
+            type: Boolean,
+            value: false,
+        },
     },
     data(){
         return{
@@ -29,8 +33,15 @@ export default{
         }
     },
     methods:{
+        _play(){
+            this.$emit('_play');
+        },
+        _paused(){
+            this.$emit('_paused');
+        },
         _progress_change(value){
-            var _music_progress_id = document.getElementById("music_progress");
+            var _music_progress_id = this.$children[0].$el;
+            console.log(_music_progress_id);
 
             var _re_value = Number((value/100 * this.music_data.total_length).toFixed(2));
 
@@ -45,10 +56,13 @@ export default{
             }
             _music_progress_id.addEventListener("touchend",_progress_change_fun);
             
-            this.$emit('_progress_change',_re_value);
-
+            this.$emit('_siblings_get_progress_change',_re_value);
 
         }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+    @import '@/style/scss/player.scss';
+</style>

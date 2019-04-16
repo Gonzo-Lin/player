@@ -31,7 +31,7 @@
 
 		
 		<!-- 播放列表 -->
-		<div class="mask" v-show="MUSIC_LIST_SHOW_FLAG" @click="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG"></div>
+		<div class="mask z-9" v-show="MUSIC_LIST_SHOW_FLAG" @click="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG"></div>
 		<music-list 
 			:MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" 
 			@hide_music_list="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG">
@@ -108,7 +108,6 @@
 			_play(){
 				this.re_playing_s = this.is_play = true;
 				my_audio.play();
-				console.log(this.music_data)
 				if (this.music_data.current_length == 0 ) {
 					this.music_data.current_length = 0.05; 
 				}
@@ -172,4 +171,5 @@
 
 <style lang="scss" scoped>
 	@import '@/style/scss/player.scss';
+
 </style>
