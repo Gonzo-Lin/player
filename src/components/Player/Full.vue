@@ -24,68 +24,100 @@
 			
 			<div class="full_player_main">
 				<div class="music_main">
-					<!-- 歌手名 -->
-					<h5>singer</h5>
-					<!-- 歌手名 -->
+					<section class="music_main_page_1">
+						<!-- 歌手名 -->
+						<h5>singer</h5>
+						<!-- 歌手名 -->
 
-					<div class="music_thumb">
-					<!-- <div class="music_thumb_bg play_start"> -->
-						<div class="music_thumb_bg">
-							<img :src="url" :class="['img_auto' , playing_current_time == 0 ? '' : ( playing_status ? 'play_start' : 'play_stop' )]">
-							<div class="like">
-								<mu-icon value="favorite"></mu-icon>
-							</div>
-							<div class="unlike">
-								<mu-icon value="favorite_border"></mu-icon>
+						<div class="music_thumb">
+						<!-- <div class="music_thumb_bg play_start"> -->
+							<div class="music_thumb_bg">
+								<img :src="url" :class="['img_auto' , playing_current_time == 0 ? '' : ( playing_status ? 'play_start' : 'play_stop' )]">
+								<div class="like">
+									<mu-icon value="favorite"></mu-icon>
+								</div>
+								<div class="unlike">
+									<mu-icon value="favorite_border"></mu-icon>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="music_lyric">
-						<p>I can pay for everything</p>
-					</div>
+						<div class="music_lyric">
+							<p>I can pay for everything</p>
+						</div>
+
+						<div class="_top_btn_wrap pt-7 pb-7">
+							<mu-flex class="flex-wrapper pl-7 pr-7" align-items="center">
+
+								<mu-flex justify-content="center" fill>
+									<mu-icon value="chat" ></mu-icon>
+								</mu-flex>
+
+								<mu-flex justify-content="center" fill>
+									<mu-icon value="first_page" class="down_load_icon"></mu-icon>
+								</mu-flex>
+
+								<mu-flex justify-content="center" fill>
+									<mu-icon value="more_horiz"></mu-icon>
+								</mu-flex>
+
+							</mu-flex>
+						</div>
+					</section>
+
+					<section class="music_main_page_2">
+						<div class="music_lyric_wrap">
+							
+						</div>
+					</section>
 				</div>
+
+				
 				
 				<div class="pagination">
 
 				</div>
 				
-				<div class="_progress_wrap">
-					<mu-flex class="flex-wrapper pl-7 pr-7" align-items="center">
-						<mu-flex justify-content="start" fill>
-							<p :class="playing_current_time == 0 ? 'disabled' : 'white'">{{ playing_current_time | _format_song_time }}</p>
-						</mu-flex>
-						<mu-flex justify-content="end" fill>
-							<p class="white"> {{ music_total_time | _format_song_time }}</p>
-						</mu-flex>
-					</mu-flex>
-					<my-progress  @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
-				</div>
+				<section class="full_player_bottom">
+					
 
-				<div class="_btn_wrap mt-15">
-					<mu-flex class="flex-wrapper pl-7 pr-7" align-items="center">
-
-						<mu-flex justify-content="center" fill>
-							<mu-icon :value=" _GLOBAL.config.play_mode[play_mode] " @click="_set_play_mode"></mu-icon>
+					<div class="_progress_wrap">
+						<mu-flex class="flex-wrapper pl-7 pr-7" align-items="center">
+							<mu-flex justify-content="start" fill>
+								<p :class="playing_current_time == 0 ? 'disabled' : 'white'">{{ playing_current_time | _format_song_time }}</p>
+							</mu-flex>
+							<mu-flex justify-content="end" fill>
+								<p class="white"> {{ music_total_time | _format_song_time }}</p>
+							</mu-flex>
 						</mu-flex>
+						<my-progress  @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
+					</div>
 
-						<mu-flex justify-content="center" fill>
-							<mu-icon value="fast_rewind"></mu-icon>
+					<div class="_btn_wrap mt-15 mb-15">
+						<mu-flex class="flex-wrapper pl-7 pr-7" align-items="center">
+
+							<mu-flex justify-content="center" fill>
+								<mu-icon :value=" _GLOBAL.config.play_mode[play_mode] " @click="_set_play_mode"></mu-icon>
+							</mu-flex>
+
+							<mu-flex justify-content="center" fill>
+								<mu-icon value="fast_rewind"></mu-icon>
+							</mu-flex>
+
+							<mu-flex justify-content="center" fill>
+								<mu-icon :value="!playing_status ? 'play_arrow' : 'pause'" @click="!playing_status ? _play() : _paused()"></mu-icon>
+							</mu-flex>
+
+							<mu-flex justify-content="center" fill>
+								<mu-icon value="fast_forward"></mu-icon>
+							</mu-flex>
+
+							<mu-flex justify-content="center" fill>
+								<mu-icon value="queue_music" @click="_music_list_flag"></mu-icon>
+							</mu-flex>
+
 						</mu-flex>
-
-						<mu-flex justify-content="center" fill>
-							<mu-icon :value="!playing_status ? 'play_arrow' : 'pause'" @click="!playing_status ? _play() : _paused()"></mu-icon>
-						</mu-flex>
-
-						<mu-flex justify-content="center" fill>
-							<mu-icon value="fast_forward"></mu-icon>
-						</mu-flex>
-
-						<mu-flex justify-content="center" fill>
-							<mu-icon value="queue_music" @click="_music_list_flag"></mu-icon>
-						</mu-flex>
-
-					</mu-flex>
-				</div>
+					</div>
+				</section>
 			</div>
 
 		</div>
@@ -173,11 +205,35 @@
 	@import '@/style/scss/player.scss';
 	.full_player_main{
 		position: sticky;
+		height: calc( 100% - 56px);
 	}
 	._progress_wrap{
-		margin-top: 15px;
 		padding: 0 15px;
 	}
-	.music_progress{
+	.music_main{
+		position: sticky;
+		height: calc( 100% - 100px );
+		[class^="music_main_page"]{
+			height: 100%;
+		}
+		.music_main_page_1{
+			position: relative;
+			._top_btn_wrap{
+				position: absolute;
+				bottom: 10px;
+				left: 0;
+				right: 0;
+			}
+		}
+	}
+	.full_player_bottom{
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		/*height: 112px;*/
+	}
+	.down_load_icon{
+		transform: rotate(-90deg);
 	}
 </style>
