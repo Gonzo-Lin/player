@@ -31,7 +31,7 @@
 					<div class="music_thumb">
 					<!-- <div class="music_thumb_bg play_start"> -->
 						<div class="music_thumb_bg">
-							<img :src="url" :class="['img_auto' , is_play ? 'play_start' : 'play_stop']">
+							<img :src="url" :class="['img_auto' , playing_current_time == 0 ? '' : ( playing_status ? 'play_start' : 'play_stop' )]">
 							<div class="like">
 								<mu-icon value="favorite"></mu-icon>
 							</div>
@@ -52,14 +52,13 @@
 				<div class="_progress_wrap">
 					<mu-flex class="flex-wrapper pl-7 pr-7" align-items="center">
 						<mu-flex justify-content="start" fill>
-							<p :class="music_data.current_length == 0 ? 'disabled' : 'white'">{{ music_data.current_length | _format_song_time }}</p>
+							<p :class="playing_current_time == 0 ? 'disabled' : 'white'">{{ playing_current_time | _format_song_time }}</p>
 						</mu-flex>
 						<mu-flex justify-content="end" fill>
-							<p class="white"> {{ music_data.total_length | _format_song_time }}</p>
-							<!-- <p class="white">- {{ ( music_data.total_length - music_data.current_length ) | _format_song_time }}</p> -->
+							<p class="white"> {{ music_total_time | _format_song_time }}</p>
 						</mu-flex>
 					</mu-flex>
-					<my-progress :music_data="music_data" :_playing="_playing" @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
+					<my-progress  @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
 				</div>
 
 				<div class="_btn_wrap mt-15">
@@ -74,7 +73,7 @@
 						</mu-flex>
 
 						<mu-flex justify-content="center" fill>
-							<mu-icon :value="!is_play ? 'play_arrow' : 'pause'" @click="!is_play ? _play() : _paused()"></mu-icon>
+							<mu-icon :value="!playing_status ? 'play_arrow' : 'pause'" @click="!playing_status ? _play() : _paused()"></mu-icon>
 						</mu-flex>
 
 						<mu-flex justify-content="center" fill>
@@ -103,18 +102,7 @@
 		name: 'full_player',
 		props:{
 			MUSIC_LIST_SHOW_FLAG: false,
-			is_play:{
-				type: Boolean,
-				value: false,
-			},
-			music_data:{
-				type: Object,
-				value: {},
-			},
-			_playing:{
-				type: Boolean,
-				value: false,
-			},
+			
 		},
 		data(){
 			return{
@@ -133,16 +121,11 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'play_mode'
+			 	'play_mode','playing_status','playing_current_time','music_total_time'
 			])
 		},
 		watch:{
-			music_data:{
-				handler(val,old){
-					this.song_time = 'song_time' in val ?  Number(((val.current_length / val.total_length) * 100).toFixed(2)) : '0';
-				},
-				deep:true
-			}
+			
 		},
 		methods:{
 			_play(){

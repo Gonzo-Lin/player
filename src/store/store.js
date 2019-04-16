@@ -8,7 +8,9 @@ let store = new Vuex.Store({
     state:{
     	music_data: {}, // 音乐信息
     	play_mode: 0, 	// 播放模式
-    	
+    	playing_status: false, // 播放状态
+    	playing_current_time: 0, // 当前播放时间
+    	music_total_time: 0,	// 当前音乐时长
     },
 
     // // 2. getters
@@ -22,6 +24,21 @@ let store = new Vuex.Store({
 	            state.play_mode = localStorage.getItem('play_mode');
 	        }
 	        return state.play_mode
+        },
+        playing_status(state){
+        	// console.log(state.playing_status)
+        	// console.log((localStorage.getItem('playing_status') === " false" ? false : true))
+        	state.playing_status = (localStorage.getItem('playing_status') == "false" ? false : true);
+	        return state.playing_status;
+        },
+        playing_current_time(state){
+        	if(state.playing_current_time == 0){
+        		state.playing_current_time = localStorage.getItem('playing_current_time');
+        	}
+	        return state.playing_current_time;
+        },
+        music_total_time(state){
+	        return state.music_total_time;
         }
     },
     // 3. actions
@@ -53,7 +70,19 @@ let store = new Vuex.Store({
 				state.play_mode = 0;
 			}
             localStorage.setItem("play_mode", state.play_mode);　
+        },
+        _set_playing_status(state,data){
+            state.playing_status = data
+            localStorage.setItem("playing_status", state.playing_status);　
+        },
+        _set_playing_current_time(state,time){
+        	state.playing_current_time = time
+            localStorage.setItem("playing_current_time", state.playing_current_time);　
+        },
+        _set_music_total_time(state,time){
+        	state.music_total_time = time
         }
+
     }
 });
 

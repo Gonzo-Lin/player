@@ -3,14 +3,10 @@
 		
 		
 		
-        <audio :src="music_data.url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
+        <audio :src="url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
 
 
-		<full 
-			:is_play = "is_play" 
-			:music_data="music_data" 
-			:_playing = "re_playing_s"
-			:MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG"
+		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG"
 			@_play = "_play" 
 			@_paused = "_paused"
 			@_music_list_flag = "_music_list_flag"
@@ -19,11 +15,7 @@
 
 
 
-		<mini 
-			:is_play = "is_play" 
-			:music_data="music_data" 
-			:_playing = "re_playing_s" 
-			:MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG"
+		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG"
 			@_play = "_play" 
 			@_paused = "_paused" 
 			@_music_list_flag = "_music_list_flag"
@@ -32,8 +24,7 @@
 		
 		<!-- 播放列表 -->
 		<div class="mask z-9" v-show="MUSIC_LIST_SHOW_FLAG" @click="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG"></div>
-		<music-list 
-			:MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" 
+		<music-list :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" 
 			@hide_music_list="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG">
 		</music-list>
 
@@ -48,6 +39,8 @@
 
 	import axios from 'axios';
 	import mp3 from '../../assets/green.mp3';
+	
+	import {mapGetters} from 'vuex';
 
 
 	const PLAYER_STATUS = !!0;
@@ -61,30 +54,35 @@
 				value: 123,
 				// song_time: 0,
 				is_play: !!0,
-
-				music_data:{
-					url: '',
-					song_time: 0,
-					total_length: 0,
-					current_length: 0,
-				},
-
-
+				url: '',
 				MUSIC_LIST_SHOW_FLAG: false,
 
-				re_playing_s: !!0,
 			}
 		},
 		created(){
 		},
 		mounted(){
 			my_audio = document.getElementById("my_audio");
+			this._get_music_list();
 			this.$nextTick(()=>{
-				this._get_music_list();
+				var _playing_status = this.$store.getters.playing_status;
+				if( this.$store.getters.playing_current_time != null || this.$store.getters.playing_current_time != 0 ){
+					this._progress_change(Number(this.$store.getters.playing_current_time));
+					this.$store.commit('_set_playing_status',_playing_status);
+				}
 				this.$nextTick(()=>{
-					// this._init_scroll();
-				});
+					if(this.$store.getters.playing_status){
+						// console.log(this.$store.getters.playing_current_time)
+						this._play();
+					}
+				})
 			})
+		},
+		computed:{
+			...mapGetters([
+			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
+			 	'playing_status','playing_current_time','music_total_time'
+			])
 		},
 		watch:{
 
@@ -96,50 +94,62 @@
 				})
 			},
 			_get_music_list(){
-				this.music_data.url = mp3;
+				this.url = mp3;
 				
 				this.$nextTick(()=>{
 					my_audio.oncanplay = ()=> {  
-						this.music_data.total_length = my_audio.duration;
-						this.music_data.current_length = my_audio.currentTime;
+						this.$store.commit('_set_music_total_time' ,my_audio.duration );
 					}
 				})
 			},
 			_play(){
-				this.re_playing_s = this.is_play = true;
+				this.$store.commit('_set_playing_status',true);
+
+
+				this.is_play = true;
 				my_audio.play();
-				if (this.music_data.current_length == 0 ) {
-					this.music_data.current_length = 0.05; 
+				
+				if(this.$store.getters.playing_current_time == 0){
+					this.$store.commit('_set_playing_current_time',0.05);
 				}
+
 				my_audio_timer = setInterval(()=>{
 					this._music_progress()
 				},1000);
 			},
 			_paused(){
-				this.re_playing_s = this.is_play = false;
+				this.$store.commit('_set_playing_status',false);
+
+				this.is_play = false;
 				my_audio.pause();
 				clearInterval(my_audio_timer);
 			},
 			// 播放进度
 			_music_progress(){
-				this.music_data.current_length = my_audio.currentTime;
+				this.$store.commit('_set_playing_current_time',my_audio.currentTime);
 			    if(my_audio.ended){
 			      	// 检测是否暂停状态
+					this.$store.commit('_set_playing_status',false);
 			      	this.is_play = false;
-			      	if(this.music_data.current_length == this.music_data.total_length) this.music_data.current_length = 0; this.re_playing_s = false;
+			      	// } 
 		  		}
 			  	if(my_audio.error != null){
 			      	// 检测是否播放错误
+					this.$store.commit('_set_playing_status',false);
 			      	this.is_play = false;
 			      	alert('音乐播放错误！')
 			  	}
 				if(my_audio.paused || my_audio.ended || my_audio.error != null) clearInterval(my_audio_timer);
 
-			  	this.music_data.song_time = Number(((this.music_data.current_length / this.music_data.total_length) * 100).toFixed(2));
+				if(this.$store.getters.playing_current_time == this.$store.getters.music_total_time){
+					this.$store.commit('_set_playing_current_time',0);
+				}
+
 			},
 			// 拖动进度条
 			_progress_change(value){
-				this.is_play = false;
+				this.$store.commit('_set_playing_current_time',value);
+				this.$store.commit('_set_playing_status',false);
 				my_audio.pause();
 				clearInterval(my_audio_timer);
 				my_audio.currentTime = value
