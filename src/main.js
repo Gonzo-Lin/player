@@ -10,7 +10,7 @@ Vue.config.productionTip = false
 
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-import 'typeface-roboto';
+import roboto from 'typeface-roboto';
 
 import './style/base/_color.scss';
 import './style/base/_mixin.scss';
@@ -18,6 +18,7 @@ import './style/base/_reset.scss';
 import './style/base/_base.scss';
 
 Vue.use(MuseUI);
+Vue.use(roboto);
 
 
 import api from "@/api/index";
