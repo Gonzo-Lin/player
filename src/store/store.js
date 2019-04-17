@@ -21,14 +21,14 @@ let store = new Vuex.Store({
         },
         play_mode(state){
         	if(state.play_mode == 0){
-	            state.play_mode = localStorage.getItem('play_mode');
+	            state.play_mode = localStorage.getItem('play_mode') || state.play_mode;
 	        }
 	        return state.play_mode
         },
         playing_status(state){
         	// console.log(state.playing_status)
         	// console.log((localStorage.getItem('playing_status') === " false" ? false : true))
-        	state.playing_status = (localStorage.getItem('playing_status') == "false" ? false : true);
+        	state.playing_status = state.playing_status || false; // (localStorage.getItem('playing_status') == "false" ? false : true) 不能自动播放。
 	        return state.playing_status;
         },
         playing_current_time(state){

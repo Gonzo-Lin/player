@@ -10,38 +10,31 @@ Vue.config.productionTip = false
 
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-import roboto from 'typeface-roboto';
+import 'typeface-roboto';
 
 import './style/base/_color.scss';
 import './style/base/_mixin.scss';
 import './style/base/_reset.scss';
 import './style/base/_base.scss';
 
-Vue.use(MuseUI);
-Vue.use(roboto);
-
 
 import api from "@/api/index";
-
 import ApiPath from "@/api/ApiPath"
 
+// 引用配置
 import _GLOBAL from "@/config"
 
+// 引用工具
+import filters from './utils/filters.js';
 
+//挂载到Vue实例上面
 Vue.prototype.$api = api
-Vue.prototype.ApiPath = ApiPath//挂载到Vue实例上面
-Vue.prototype._GLOBAL = _GLOBAL//挂载到Vue实例上面
+Vue.prototype.ApiPath = ApiPath
+Vue.prototype._GLOBAL = _GLOBAL
 
 
-// 格式化歌曲时间
-Vue.filter('_format_song_time',(value)=>{
-	if (!value) return '0:00';
-	var _minues = parseInt(value / 60),
-	_second = parseInt(value % 60 );
-	return `${_minues}:${_second < 10 ? '0'+_second : _second}`
-})
-
-
+Vue.use(MuseUI);
+Vue.use(filters);
 
 /* eslint-disable no-new */
 new Vue({

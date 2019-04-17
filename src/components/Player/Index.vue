@@ -3,10 +3,10 @@
 		
 		
 		
-        <audio :src="url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
+        <audio :src="_get_music_data.url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
 
 
-		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG"
+		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" v-if="_get_music_data.url ? false : true"
 			@_play = "_play" 
 			@_paused = "_paused"
 			@_music_list_flag = "_music_list_flag"
@@ -15,7 +15,7 @@
 
 
 
-		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG"
+		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_get_music_data.url ? false : true"
 			@_play = "_play" 
 			@_paused = "_paused" 
 			@_music_list_flag = "_music_list_flag"
@@ -54,7 +54,7 @@
 				value: 123,
 				// song_time: 0,
 				is_play: !!0,
-				url: '',
+				// url: '',
 				MUSIC_LIST_SHOW_FLAG: false,
 
 			}
@@ -63,25 +63,25 @@
 		},
 		mounted(){
 			my_audio = document.getElementById("my_audio");
-			this._get_music_list();
+			this._get_music_url();
 			this.$nextTick(()=>{
 				var _playing_status = this.$store.getters.playing_status;
 				if( this.$store.getters.playing_current_time != null || this.$store.getters.playing_current_time != 0 ){
 					this._progress_change(Number(this.$store.getters.playing_current_time));
 					this.$store.commit('_set_playing_status',_playing_status);
 				}
-				this.$nextTick(()=>{
-					if(this.$store.getters.playing_status){
-						// console.log(this.$store.getters.playing_current_time)
-						this._play();
-					}
-				})
+				// if(this.$store.getters.playing_status){
+				// 	this.$nextTick(()=>{
+				// 		// console.log(this.$store.getters.playing_current_time)
+				// 		this._play();
+				// 	})
+				// }
 			})
 		},
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'playing_status','playing_current_time','music_total_time'
+			 	'playing_status','playing_current_time','music_total_time','_get_music_data'
 			])
 		},
 		watch:{
@@ -93,22 +93,38 @@
 					click: true,
 				})
 			},
-			_get_music_list(){
-				this.url = mp3;
+			_get_music_url(){
+				// this.$store.commit('_set_music' ,{url: mp3});
+				// this.url = mp3;
 				
 				this.$nextTick(()=>{
+					if( !my_audio.src ){
+						this.$store.commit('_set_music_total_time' ,100);
+						this.$store.commit('_set_playing_current_time' ,0);
+						return;
+					}
+
+					console.log(my_audio.src)
+					my_audio.loadstart = ()=>{
+						console.log(my_audio.readyState);
+						if(my_audio.readyState == 0){
+							this.$store.commit('_set_music_total_time' ,0);
+							console.log(1)
+							return;
+						}
+					}
 					my_audio.oncanplay = ()=> {  
 						this.$store.commit('_set_music_total_time' ,my_audio.duration );
 					}
 				})
 			},
 			_play(){
+				if (!my_audio.src) 
+			      	alert(this._GLOBAL.msg.MUSIC_ERROR);
+			      	return;
+
 				this.$store.commit('_set_playing_status',true);
-
-
 				this.is_play = true;
-				my_audio.play();
-				
 				if(this.$store.getters.playing_current_time == 0){
 					this.$store.commit('_set_playing_current_time',0.05);
 				}
@@ -116,6 +132,11 @@
 				my_audio_timer = setInterval(()=>{
 					this._music_progress()
 				},1000);
+
+				this.$nextTick(()=>{
+					// console.log(my_audio)
+					my_audio.play();
+				})
 			},
 			_paused(){
 				this.$store.commit('_set_playing_status',false);
@@ -137,7 +158,7 @@
 			      	// 检测是否播放错误
 					this.$store.commit('_set_playing_status',false);
 			      	this.is_play = false;
-			      	alert('音乐播放错误！')
+			      	alert(this._GLOBAL.msg.MUSIC_ERROR)
 			  	}
 				if(my_audio.paused || my_audio.ended || my_audio.error != null) clearInterval(my_audio_timer);
 

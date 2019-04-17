@@ -14,6 +14,7 @@ $_disabled: #909399;
 
 $_body: #eff2f7;
 
+$default_color: #333333;
 
 $border_1: #DCDFE6;
 $border_2: #E4E7ED;
@@ -21,7 +22,9 @@ $border_3: #EBEEF5;
 $border_4: #F2F6FC;
 
 
-
+.default{
+	color: $default_color;
+}
 .primary{
 	color: $primary;
 }

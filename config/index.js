@@ -4,22 +4,34 @@
 
 const path = require('path')
 
+let outline_api_url = 'http://localhost:3000/';
+
 module.exports = {
   dev: {
 
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+        '/v1':{
+            target: outline_api_url, 
+            secure: false,
+            changeOrigin: true,
+            pathRewrite:{
+                '^/v1': '/'
+            }
+        },
+    },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    host: "0.0.0.0",
+    useLocalIp: true,
+    // host: 'localhost', // can be overwritten by process.env.HOST
     port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
-
     
     /**
      * Source Maps

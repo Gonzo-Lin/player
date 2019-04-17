@@ -1,6 +1,6 @@
 <template>
     <div class="music_progress">
-        <mu-slider color="secondary" v-model="song_time" ref="song_time" @change="_progress_change" class="music_progress_wrap" ></mu-slider>
+        <mu-slider :disabled="disabled" color="secondary" v-model="song_time" ref="song_time" @change="_progress_change" class="music_progress_wrap" ></mu-slider>
         <div class="reset_display_value_text" :style="'left:'+song_time+'%'">{{ playing_current_time | _format_song_time }}</div>
     </div>
 </template>
@@ -15,11 +15,14 @@ export default{
             type: Object,
             value: {},
         },
+        disabled: {
+            type: Boolean,
+            value: false,
+        },
     },
     data(){
         return{
             song_time: 0,
-
         }
     },
     watch:{
@@ -48,7 +51,6 @@ export default{
     mounted(){
         this.$nextTick(()=>{
             this.song_time = Number(((this.playing_current_time / this.music_total_time) * 100).toFixed(2));
-
             // _playing_status = this.$store.getters.playing_status;
         })
     },
@@ -61,7 +63,7 @@ export default{
         },
         _progress_change(value){
             var _music_progress_id = this.$children[0].$el;
-            
+
             _playing_status = this.$parent.$parent.is_play;
 
             var _re_value = Number((value/100 * this.$store.getters.music_total_time).toFixed(2));

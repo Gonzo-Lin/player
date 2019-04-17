@@ -9,38 +9,38 @@
 	width: 100%;
 }
 $_length: 35 !default;
-$_margin_width: 1px !default;
+$_default_px: 1px !default;
 
 @for $margin_num from 0 through $_length{
 	.mt-#{$margin_num} {
-		margin-top: $margin_num * $_margin_width;
+		margin-top: $margin_num * $_default_px;
 	}
 	.mb-#{$margin_num} {
-		margin-bottom: $margin_num * $_margin_width;
+		margin-bottom: $margin_num * $_default_px;
 	}
 	.ml-#{$margin_num} {
-		margin-left: $margin_num * $_margin_width;
+		margin-left: $margin_num * $_default_px;
 	}
 	.mr-#{$margin_num} {
-		margin-right: $margin_num * $_margin_width;
+		margin-right: $margin_num * $_default_px;
 	}
 	.m-#{$margin_num} {
-		margin: $margin_num * $_margin_width;
+		margin: $margin_num * $_default_px;
 	}
 	.pt-#{$margin_num} {
-		padding-top: $margin_num * $_margin_width;
+		padding-top: $margin_num * $_default_px;
 	}
 	.pb-#{$margin_num} {
-		padding-bottom: $margin_num * $_margin_width;
+		padding-bottom: $margin_num * $_default_px;
 	}
 	.pl-#{$margin_num} {
-		padding-left: $margin_num * $_margin_width;
+		padding-left: $margin_num * $_default_px;
 	}
 	.pr-#{$margin_num} {
-		padding-right: $margin_num * $_margin_width;
+		padding-right: $margin_num * $_default_px;
 	}
 	.p-#{$margin_num} {
-		padding: $margin_num * $_margin_width;
+		padding: $margin_num * $_default_px;
 	}
 	.z-#{$margin_num} {
 		z-index: $margin_num;
@@ -48,8 +48,25 @@ $_margin_width: 1px !default;
 }
 
 
+@for $font_size from 12 through $_length{
+	.f-#{$font_size}{
+		font-size: $font_size * $_default_px;
+	}
+}
 
-.f-12{font-size: 12px;}
+.text_left{
+	text-align: left;
+}
+.text_center{
+	text-align: center;
+}
+.text_right{
+	text-align: right;
+}
+
+.block{
+	display: block;
+}
 
 .hover-shadow{
 	&:hover{

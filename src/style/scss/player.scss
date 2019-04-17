@@ -153,16 +153,20 @@
                     top: 50%;
                     border-radius: 50%;
                     font-size: 0;
-                    padding: 7px;
+                    /*padding: 7px;*/
                     transform: translate(calc( -50% + 3.5px ),-50%);
+                    .like_btn{
+                        background: $special;
+                    }
+                    .unlike_btn{
+                        background: $border_1;
+                    }
                 }
                 .like{
                     left: 0;
-                    background: $special;
                 }
                 .unlike{
                     right: 0;
-                    background: $border_1;
                     transform: translate(calc( 50% - 3.5px ),-50%);
                 }
             }

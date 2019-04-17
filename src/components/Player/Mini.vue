@@ -1,21 +1,46 @@
 <template>
 	<transition name="fade_top">
 		<div class="mini_player" v-show="!MUSIC_LIST_SHOW_FLAG && !FULL_PLAYER_SHOW">
-			<my-progress @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
+			<div v-if="!disabled">
+				<my-progress @_siblings_get_progress_change="_siblings_get_progress_change" @_play="_play" @_paused="_paused" />
 
-	        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" fill>
-	            <mu-avatar class="mini_player_thumb" @click.native="_show_full_player">
-	                <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000004ex2Wu3qLZvz.jpg?max_age=2592000" alt="Drinking from the Bottle" :class="['img_auto cricle' , playing_status ? 'play_start' : 'play_stop']"  />
-	            </mu-avatar>
-	            <div class="mini_player_main">
-	                <h4>Drinking from the Bottle</h4>
-	                <p>Calvin Harris - Tinie Tempah</p>
-	            </div>
-	            <div class="mini_player_btn">
-	                <mu-icon :value=" playing_status ? 'pause' : 'play_arrow'" size="36" @click="!playing_status ? _play() : _paused()"></mu-icon>
-	                <mu-icon value="queue_music" size="36" @click="_music_list_flag"></mu-icon>
-	            </div>
-	        </mu-flex>
+		        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" fill>
+		            <mu-avatar class="mini_player_thumb" @click.native="_show_full_player">
+		                <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000004ex2Wu3qLZvz.jpg?max_age=2592000" alt="Drinking from the Bottle" :class="['img_auto cricle' , playing_status ? 'play_start' : 'play_stop']"  />
+		            </mu-avatar>
+		            <div class="mini_player_main">
+		                <h4>Drinking from the Bottle</h4>
+		                <p>Calvin Harris - Tinie Tempah</p>
+		            </div>
+		            <div class="mini_player_btn">
+		            	<mu-button icon disabled @click="!playing_status ? _play() : _paused()">
+		               		<mu-icon :value=" playing_status ? 'pause' : 'play_arrow'" size="36"></mu-icon>
+		            	</mu-button>
+		            	<mu-button icon disabled @click="_music_list_flag">
+		                	<mu-icon value="queue_music" size="36"></mu-icon>
+		            	</mu-button>
+		                <!-- <mu-icon :value=" playing_status ? 'pause' : 'play_arrow'" size="36" @click="!playing_status ? _play() : _paused()"></mu-icon>
+		                <mu-icon value="queue_music" size="36" @click="_music_list_flag"></mu-icon> -->
+		            </div>
+		        </mu-flex>
+			</div>
+			<div v-if="disabled">
+				<my-progress disabled />
+
+		        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" fill>
+		            <div class="mini_player_main">
+		                <h4>享受音乐，听你所想</h4>
+		            </div>
+		            <div class="mini_player_btn">
+		            	<mu-button icon disabled>
+		                	<mu-icon value="play_arrow" size="36" disabled></mu-icon>
+		            	</mu-button>
+		            	<mu-button icon disabled>
+		                	<mu-icon value="queue_music" size="36" disabled></mu-icon>
+		            	</mu-button>
+		            </div>
+		        </mu-flex>
+			</div>
 		</div>
 	</transition>
 </template>
@@ -30,7 +55,7 @@
 		name: 'mini_player',
 		props:{
 			MUSIC_LIST_SHOW_FLAG: false,
-			
+			disabled: false,
 		},
 		data(){
 			return {
@@ -104,5 +129,10 @@
 	@import '@/style/scss/player.scss';
 	/deep/ .mu-slider{
 		height: 14px;
+	}
+	/deep/ .mu-icon-button{
+		padding: 0;
+		width: auto;
+		height: auto;
 	}
 </style>

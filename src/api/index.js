@@ -66,26 +66,23 @@ function iApiAxios (method, url, params, success, failure) {
     loading ? loading.close() : '';
 
   })
-  /*
-  axios({
-    method: method,
-    url: url,
-    data: method === 'POST' || method === 'PUT' ? params : null,
-    params: method === 'GET' || method === 'DELETE' ? params : null,
-    baseURL: root,
-    withCredentials: false
-  })
-  .then(function (res) {
-    console.log(res);
-  })
-  .catch(function (err) {
-    let res = err.response
-    if (err) {
-      window.alert('api error, HTTP CODE: ' + res.status)
-    }
-  })*/
-  
 }
+
+// 请求的拦截器
+axios.interceptors.request.use(function (config) {
+     // 判断请求的类型
+     // 如果是post请求就把默认参数拼到data里面
+     // 如果是get请求就拼到params里面
+     config.params = {
+      ...config.params,
+      proxy: 'http://127.0.0.1:54599',
+    }
+    return config;
+  }, function (error) {
+    return Promise.reject(error);
+  }
+  )
+
 
 // 返回在vue模板中的调用接口
 export default {
