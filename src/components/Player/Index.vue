@@ -5,8 +5,7 @@
 		
         <audio :src="current_music_play.url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
 
-
-		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" v-show="_play_list.length != 0 ? false : true"
+		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" v-show="_play_list ? false : true"
 			@_play = "_play" 
 			@_paused = "_paused"
 			@_music_list_flag = "_music_list_flag"
@@ -15,7 +14,7 @@
 
 
 
-		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_play_list.length != 0  ? false : true"
+		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_play_list  ? false : true"
 			@_play = "_play" 
 			@_paused = "_paused" 
 			@_music_list_flag = "_music_list_flag"

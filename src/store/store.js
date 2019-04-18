@@ -94,7 +94,7 @@ let store = new Vuex.Store({
         },
         // 设置播放列表
         _set_play_list(state,data){
-            if(data.id == JSON.parse(localStorage.getItem("play_list")).id ){
+            if(localStorage.getItem("play_list") != null && data.id == JSON.parse(localStorage.getItem("play_list")).id ){
                 return;
             }
             state.play_list = JSON.stringify(data)

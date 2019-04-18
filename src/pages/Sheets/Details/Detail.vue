@@ -100,7 +100,6 @@
 				this.$api.get(this.ApiPath.check.music,{
 					id: id
 				},success=>{
-					console.log(0)
 					console.log(success.data)
 				},fail=>{
 					this.$alert(fail.data.message );
