@@ -4,7 +4,7 @@
 
 const path = require('path')
 
-let outline_api_url = 'http://localhost:3000/';
+let outline_api_url = 'http://10.10.61.184:3000/';
 
 module.exports = {
   dev: {
