@@ -38,7 +38,6 @@
 
 
 	import axios from 'axios';
-	import mp3 from '../../assets/green.mp3';
 	
 	import {mapGetters} from 'vuex';
 
