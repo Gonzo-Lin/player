@@ -11,6 +11,8 @@ let store = new Vuex.Store({
     	playing_status: false, // 播放状态
     	playing_current_time: 0, // 当前播放时间
     	music_total_time: 0,	// 当前音乐时长
+        play_list: {}, // 播放列表
+        current_music_play: {}, // 当前播放音乐信息
     },
 
     // // 2. getters
@@ -39,6 +41,14 @@ let store = new Vuex.Store({
         },
         music_total_time(state){
 	        return state.music_total_time;
+        },
+        _play_list(state){
+            state.play_list = JSON.parse(localStorage.getItem('play_list')) || state.play_list;
+            return state.play_list.tracks
+        },
+        current_music_play(state){
+            state.current_music_play = JSON.parse(localStorage.getItem('current_music_play')) || state.current_music_play;
+            return state.current_music_play;
         }
     },
     // 3. actions
@@ -81,6 +91,19 @@ let store = new Vuex.Store({
         },
         _set_music_total_time(state,time){
         	state.music_total_time = time
+        },
+        // 设置播放列表
+        _set_play_list(state,data){
+            if(data.id == JSON.parse(localStorage.getItem("play_list")).id ){
+                return;
+            }
+            state.play_list = JSON.stringify(data)
+            localStorage.setItem("play_list", state.play_list);　
+        },
+        // 播放当前选择音乐
+        _set_current_music_play(state,data){
+            state.current_music_play = JSON.stringify(data);
+            localStorage.setItem("current_music_play", state.current_music_play);　
         }
 
     }

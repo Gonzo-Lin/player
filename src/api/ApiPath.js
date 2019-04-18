@@ -17,6 +17,10 @@ export default{
 		hightquality: '/top/playlist/highquality',
 	},
 	song:{
-		url: '/song/url'
+		url: '/song/url',
+		detail: '/song/detail'
+	},
+	check:{
+		music: '/check/music'
 	}
 }

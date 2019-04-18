@@ -19,13 +19,18 @@
 				</mu-flex>
 			</section>
 			<section class="music_list_wrap_scroll" ref="music_list_wrap_scroll">
-				<mu-list>
-					<template v-for="item in 10">
+				<mu-list >
+					<template v-for="item in _play_list">
 						<mu-list-item button class="music_list_item" @click.native="select_music(item)">
-							<mu-list-item-title>Let's Go {{item}} <span class="music_list_item_singer">- Tiësto/Icona Pop</span></mu-list-item-title>
-							<mu-list-item-action>
+							<mu-list-item-content class="pt-7 pb-7">
+								<mu-list-item-title>{{ item.name }}</mu-list-item-title>
+								<mu-list-item-sub-title>{{ item.ar[0].name + ' - ' + item.al.name }}</mu-list-item-sub-title>
+							</mu-list-item-content>
+							<!-- <mu-list-item-title>{{ item.name }} <span class="music_list_item_singer">- </span></mu-list-item-title> -->
+
+							<!-- <mu-list-item-action>
 								<mu-icon value="chat_bubble"></mu-icon>
-							</mu-list-item-action>
+							</mu-list-item-action> -->
 						</mu-list-item>
 						<mu-divider />
 					</template>
@@ -76,7 +81,7 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'play_mode'
+			 	'play_mode','_play_list'
 			])
 		},
 		watch:{
@@ -90,7 +95,27 @@
 			},
 			// 选择音乐播放
 			select_music(item){
-				console.log(item)
+				var song = '';
+				item['ar'].map((s,k)=>{
+					song+=(s.name+ (k>1 ? '/': ''));
+				});
+				
+				this._check_music(item.id);
+
+
+				this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl})
+
+			},
+			_check_music(id){
+				this.$api.get(this.ApiPath.check.music,{
+					id: id
+				},success=>{
+					return fail.success
+				},fail=>{
+					this.$alert(fail.data.message );
+					return fail.success
+					// console.error(fail);
+				})
 			},
 
 			// 收藏全部
@@ -129,6 +154,9 @@
 	/*overflow: hidden;*/
 
 	.music_list_item{
+		/deep/ .mu-item {
+			height: auto;
+		}
 		.music_list_item_singer{
 			font-size: 75%;
 			letter-spacing: 0.05em;

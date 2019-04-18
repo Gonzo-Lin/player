@@ -6,7 +6,7 @@
 					<mu-icon value="keyboard_arrow_down"></mu-icon>
 				</mu-button>
 				<!-- 歌曲名 -->
-				Drinking from the Bottle
+				{{ current_music_play.name }}
 				<!-- 歌曲名 -->
 				<mu-button flat slot="right">
 					<mu-icon value="open_in_new"></mu-icon>
@@ -15,7 +15,7 @@
 
 			<div class="full_player_head s">
 				<div class="img_bg">
-					<img :src="url" class="img_auto">
+					<img :src="current_music_play.thumb" class="img_auto">
 					<div class="mask"></div>
 				</div>
 				<div class="music_thumb">
@@ -26,13 +26,13 @@
 				<div class="music_main">
 					<section class="music_main_page_1">
 						<!-- 歌手名 -->
-						<h5>singer</h5>
+						<h5>{{ current_music_play.desc }}</h5>
 						<!-- 歌手名 -->
 
 						<div class="music_thumb">
 						<!-- <div class="music_thumb_bg play_start"> -->
 							<div class="music_thumb_bg">
-								<img :src="url" :class="['img_auto' , playing_current_time == 0 ? '' : ( playing_status ? 'play_start' : 'play_stop' )]">
+								<img :src="current_music_play.thumb" :class="['img_auto' , playing_current_time == 0 ? '' : ( playing_status ? 'play_start' : 'play_stop' )]">
 								<div class="like" >
 									<mu-button icon fab small  class="like_btn">
 										<mu-icon value="favorite"></mu-icon>
@@ -173,7 +173,7 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'play_mode','playing_status','playing_current_time','music_total_time'
+			 	'play_mode','playing_status','playing_current_time','music_total_time','current_music_play'
 			])
 		},
 		watch:{

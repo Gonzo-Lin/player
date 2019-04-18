@@ -6,17 +6,17 @@
 
 		        <mu-flex class="flex-wrapper" justify-content="center" align-items="center" fill>
 		            <mu-avatar class="mini_player_thumb" @click.native="_show_full_player">
-		                <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000004ex2Wu3qLZvz.jpg?max_age=2592000" alt="Drinking from the Bottle" :class="['img_auto cricle' , playing_status ? 'play_start' : 'play_stop']"  />
+		                <img :src="current_music_play.thumb" :alt="current_music_play.name" :class="['img_auto cricle' , playing_status ? 'play_start' : 'play_stop']"  />
 		            </mu-avatar>
 		            <div class="mini_player_main">
-		                <h4>Drinking from the Bottle</h4>
-		                <p>Calvin Harris - Tinie Tempah</p>
+		                <h4>{{ current_music_play.name }}</h4>
+		                <p>{{ current_music_play.desc }}</p>
 		            </div>
 		            <div class="mini_player_btn">
-		            	<mu-button icon disabled @click="!playing_status ? _play() : _paused()">
+		            	<mu-button icon @click="!playing_status ? _play() : _paused()">
 		               		<mu-icon :value=" playing_status ? 'pause' : 'play_arrow'" size="36"></mu-icon>
 		            	</mu-button>
-		            	<mu-button icon disabled @click="_music_list_flag">
+		            	<mu-button icon @click="_music_list_flag">
 		                	<mu-icon value="queue_music" size="36"></mu-icon>
 		            	</mu-button>
 		                <!-- <mu-icon :value=" playing_status ? 'pause' : 'play_arrow'" size="36" @click="!playing_status ? _play() : _paused()"></mu-icon>
@@ -75,7 +75,7 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'playing_status'
+			 	'playing_status','current_music_play'
 			])
 		},
 		methods:{

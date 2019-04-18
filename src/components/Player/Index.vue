@@ -3,10 +3,10 @@
 		
 		
 		
-        <audio :src="_get_music_data.url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
+        <audio :src="current_music_play.url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
 
 
-		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" v-if="_get_music_data.url ? false : true"
+		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" v-show="_play_list.length != 0 ? false : true"
 			@_play = "_play" 
 			@_paused = "_paused"
 			@_music_list_flag = "_music_list_flag"
@@ -15,7 +15,7 @@
 
 
 
-		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_get_music_data.url ? false : true"
+		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_play_list.length != 0  ? false : true"
 			@_play = "_play" 
 			@_paused = "_paused" 
 			@_music_list_flag = "_music_list_flag"
@@ -70,6 +70,7 @@
 					this._progress_change(Number(this.$store.getters.playing_current_time));
 					this.$store.commit('_set_playing_status',_playing_status);
 				}
+
 				// if(this.$store.getters.playing_status){
 				// 	this.$nextTick(()=>{
 				// 		// console.log(this.$store.getters.playing_current_time)
@@ -81,7 +82,7 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'playing_status','playing_current_time','music_total_time','_get_music_data'
+			 	'playing_status','playing_current_time','music_total_time','_get_music_data','_play_list','current_music_play'
 			])
 		},
 		watch:{

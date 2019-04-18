@@ -14,17 +14,25 @@
 
 			<section :class="['sheets_list_wrap', 'p-'+(_GLOBAL.config.padding/2) ] ">
 				<mu-grid-list class="gridlist" :padding="_GLOBAL.config.padding/2">
-					<mu-grid-tile v-for="sheet, index in sheets_list" :key="index">
-						<img :src="sheet.coverImgUrl" >
+					<mu-grid-tile v-for="sheet, index in sheets_list" :key="index" @click.native="_select_sheet(sheet.id)" >
+						<img :src="sheet.coverImgUrl" />
 						<span slot="title" class="f-12 text_left">{{ sheet.name | text_loading}}</span>
 						<span slot="subTitle" class="f-12 text_left primary">by <b class="white">{{ sheet.creator['nickname'] | text_loading }}</b></span>
+						<mu-button slot="action" icon @click.stop="_player_sheets(sheet.id)">
+							<mu-icon value="play_circle_outline"></mu-icon>
+						</mu-button>
 					</mu-grid-tile>
 				</mu-grid-list>
+
+				<router-link  v-for="sheet, index in sheets_list" :key="index" :to="'/sheets/hots/'+sheet.id"  >
+					{{ sheet.name }}
+				</router-link>
 				
 				<!-- <div class="mt-15 mb-15">
 					<mu-button round color="primary" @click="_load_more">Load More</mu-button>
 				</div> -->
 			</section>
+
 		</div>
 	</transition>
 </template>
@@ -87,6 +95,17 @@
 					console.log(fail)
 				})
 			},
+			// 选择歌单
+			_select_sheet(id){
+				this.$router.push(this.$route.matched[0].path+'/details/'+id)
+
+			},
+
+			// 播放歌单
+			_player_sheets(id){
+				console.log(id);
+
+			}
 			
 		},
 		filters:{
@@ -140,6 +159,13 @@
 }
 
 .mu-grid-tile{
+	> img{
+		width: 100%;
+		top: 50%;
+		left: 0;
+		transform: translateY(-50%);
+		height: auto;
+	}
 	/deep/ &.multiline{
 		.mu-grid-tile-titlebar{
 			height: auto;
@@ -152,13 +178,7 @@
 			}
 		}
 	}
-	> img{
-		width: 100%;
-		top: 50%;
-		left: 0;
-		transform: translateY(-50%);
-		height: auto;
-	}
+	
 }
 
 </style>

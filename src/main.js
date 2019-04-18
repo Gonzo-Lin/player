@@ -10,7 +10,10 @@ Vue.config.productionTip = false
 
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
+import 'muse-ui-message/dist/muse-ui-message.css';
 import 'typeface-roboto';
+import Message from 'muse-ui-message';
+
 
 import './style/base/_color.scss';
 import './style/base/_mixin.scss';
@@ -35,6 +38,7 @@ Vue.prototype._GLOBAL = _GLOBAL
 
 Vue.use(MuseUI);
 Vue.use(filters);
+Vue.use(Message);
 
 /* eslint-disable no-new */
 new Vue({

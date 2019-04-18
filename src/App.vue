@@ -2,12 +2,18 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <router-view/>
+	<my-player></my-player>
+
   </div>
 </template>
 
 <script>
+import MyPlayer from '@/components/Player/Index'
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+  	MyPlayer
+  }
 }
 </script>
 

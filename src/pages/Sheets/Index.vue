@@ -1,5 +1,7 @@
 <template>
 	<div class="sheets_hots_wrap">
+		<router-link to="/sheets/hots"> hots </router-link>
+		<router-link to="/sheets/details"> details </router-link>
 		<keep-alive>
 			<router-view/>
 		</keep-alive>

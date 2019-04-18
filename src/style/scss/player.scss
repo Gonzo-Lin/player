@@ -7,6 +7,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: 9;
     .my_audio{
     	/*transform: translateY(calc(-100% - 70px));*/
         display: none;
@@ -140,6 +141,8 @@
         .music_thumb{
             margin: 15px auto;
             .music_thumb_bg{
+                width: 300px;
+                height: 300px;
                 border-radius: 50%;
                 background: rgba(0,0,0,0.3);
                 padding: 7px;

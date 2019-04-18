@@ -6,7 +6,9 @@ var axios = require('axios')
 // var utils = require('../utils').default
 
 import 'muse-ui-loading/dist/muse-ui-loading.css'; // load css
+import 'muse-ui-message/dist/muse-ui-message.css';
 import Loading from 'muse-ui-loading';
+import Message from 'muse-ui-message';
 
 
 // 配置API接口地址
@@ -54,14 +56,14 @@ function iApiAxios (method, url, params, success, failure) {
     loading ? loading.close() : '';
   })
   .catch((err)=>{
-    
-    if(failure) failure(err);
-
-    let res = err.response
-    if (err) {
-      console.log(err)
-      // window.alert('api error, HTTP CODE: ' + ('code' in err ? res.code : res.status ));
-    }
+    let res = err.response;
+    failure ? failure(res) : Message.alert(res.data.message);
+    // if(failure) failure(res);
+    // if (!failure) {
+    //   // Message.alert('api error, HTTP CODE: ' + ('code' in err ? res.code : res.status ))
+    //   Message.alert(res.data.message );
+    //   // window.alert('api error, HTTP CODE: ' + ('code' in err ? res.code : res.status ));
+    // }
 
     loading ? loading.close() : '';
 

@@ -8,5 +8,8 @@ export default{
 	Sheets: getCommonPagesPath('Sheets/Index'),
 	HotsSheets: getCommonPagesPath('Sheets/Hots'),
 
+	SheetsDetails: getCommonPagesPath('Sheets/Details/Index'),
+	SheetsDetailsShow: getCommonPagesPath('Sheets/Details/Detail'),
+
 
 }

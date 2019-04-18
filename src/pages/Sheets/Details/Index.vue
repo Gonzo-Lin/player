@@ -1,14 +1,16 @@
 <template>
-	<div class="sheets_hots_wrap">
-		<keep-alive>
-			<router-view/>
-		</keep-alive>
-	</div>
+	<transition name="fadeInOut">
+		<div class="sheets_hots_wrap">
+			<keep-alive>
+				<router-view/>
+			</keep-alive>
+		</div>
+	</transition>
 </template>
 
 <script>
 	export default{
-		name: "SheetsDetail",
+		name: "SheetsDetailsIndex",
 		data(){
 			return {
 				
