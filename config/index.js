@@ -18,7 +18,7 @@ module.exports = {
             secure: false,
             changeOrigin: true,
             pathRewrite:{
-                '^/v1': '/'
+                '^/v1': ''
             }
         },
     },
