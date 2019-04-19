@@ -11,7 +11,8 @@ let store = new Vuex.Store({
     	playing_status: false, // 播放状态
     	playing_current_time: 0, // 当前播放时间
     	music_total_time: 0,	// 当前音乐时长
-        play_list: {}, // 播放列表
+        play_list: [], // 播放列表
+        privileges: [], // 不知道是什么，暂时用来区分国内外
         current_music_play: {}, // 当前播放音乐信息
     },
 
@@ -44,7 +45,11 @@ let store = new Vuex.Store({
         },
         _play_list(state){
             state.play_list = JSON.parse(localStorage.getItem('play_list')) || state.play_list;
-            return state.play_list.tracks
+            return state.play_list;
+        },
+        _privileges(state){
+            state.privileges = JSON.parse(localStorage.getItem('privileges')) || state.privileges;
+            return state.privileges;
         },
         current_music_play(state){
             state.current_music_play = JSON.parse(localStorage.getItem('current_music_play')) || state.current_music_play;
@@ -94,16 +99,20 @@ let store = new Vuex.Store({
         },
         // 设置播放列表
         _set_play_list(state,data){
+
             if(localStorage.getItem("play_list") != null && data.id == JSON.parse(localStorage.getItem("play_list")).id ){
                 return;
             }
-            state.play_list = JSON.stringify(data)
+            state.play_list = JSON.stringify(data.tracks);
+            state.privileges = JSON.stringify(data.privileges);
             localStorage.setItem("play_list", state.play_list);　
+            localStorage.setItem("privileges", state.privileges);　
+            // localStorage.setItem("privileges", state.privileges);　
         },
         // 播放当前选择音乐
         _set_current_music_play(state,data){
             state.current_music_play = JSON.stringify(data);
-            localStorage.setItem("current_music_play", state.current_music_play);　
+            localStorage.setItem("current_music_play", state.current_music_play);
         }
 
     }

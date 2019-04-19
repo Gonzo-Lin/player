@@ -24,7 +24,7 @@
 			
 			<div class="full_player_main">
 				<div class="music_main">
-					<section class="music_main_page_1">
+					<section :class="['music_main_page_1' , main_page_show ? 'main_page_show' : '' ]" @click="main_page_show = !main_page_show">
 						<!-- 歌手名 -->
 						<h5>{{ current_music_play.desc }}</h5>
 						<!-- 歌手名 -->
@@ -74,9 +74,8 @@
 						</div>
 					</section>
 
-					<section class="music_main_page_2">
-						<div class="music_lyric_wrap">
-							
+					<section :class="['music_main_page_2' , !main_page_show ? 'main_page_show' : '' ]" @click="main_page_show = !main_page_show">
+						<div class="music_lyric_wrap" v-html="lyric">
 						</div>
 					</section>
 				</div>
@@ -154,20 +153,23 @@
 		name: 'full_player',
 		props:{
 			MUSIC_LIST_SHOW_FLAG: false,
-			
+			lyric: {
+				type: String,
+				value: '',
+			}
 		},
 		data(){
 			return{
 				SHOW_FULL_PLAYER_FLAG: !!0,
-
+				main_page_show: true,
 				// play_mode: this._GLOBAL.config.default_play_mode,
 
 				url: 'https://y.gtimg.cn/music/photo_new/T002R300x300M000004ex2Wu3qLZvz.jpg?max_age=2592000',
 			}
 		},
 		mounted(){
+			this._show_full_player();
 			this.$nextTick(()=>{
-				this._show_full_player();
 			})
 		},
 		computed:{
@@ -200,6 +202,8 @@
 			_siblings_get_progress_change(data){
 				this.$emit('_progress_change',data);
 			},
+			
+
 
 
 			_music_list_flag(){
@@ -235,9 +239,16 @@
 		height: calc( 100% - 110px );
 		[class^="music_main_page"]{
 			height: 100%;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			overflow: hidden;
+			opacity: 0;
+			transition: all .3s;
 		}
 		.music_main_page_1{
-			position: relative;
 			._top_btn_wrap{
 				position: absolute;
 				bottom: 10px;
@@ -255,5 +266,11 @@
 	}
 	.down_load_icon{
 		transform: rotate(-90deg);
+	}
+	.music_lyric_wrap{
+		white-space: pre-wrap;
+	}
+	.main_page_show{
+		opacity: 1!important;
 	}
 </style>

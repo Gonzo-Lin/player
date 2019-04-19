@@ -56,6 +56,10 @@
 		props:{
 			MUSIC_LIST_SHOW_FLAG: false,
 			disabled: false,
+			lyric: {
+				type: String,
+				value: '',
+			}
 		},
 		data(){
 			return {

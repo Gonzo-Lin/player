@@ -1,11 +1,9 @@
 <template>
 	<div class="player_wrap">
-		
-		
-		
-        <audio :src="current_music_play.url" controls="" ref="myAudio" class="my_audio" id="my_audio" />
 
-		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" v-show="_play_list ? false : true"
+        <audio :src="mp3" controls="" ref="myAudio" class="my_audio" id="my_audio" />
+
+		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :lyric="lyric" v-show="_disabled"
 			@_play = "_play" 
 			@_paused = "_paused"
 			@_music_list_flag = "_music_list_flag"
@@ -14,7 +12,7 @@
 
 
 
-		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_play_list  ? false : true"
+		<mini :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :disabled="_disabled" :lyric="lyric"
 			@_play = "_play" 
 			@_paused = "_paused" 
 			@_music_list_flag = "_music_list_flag"
@@ -54,6 +52,8 @@
 				is_play: !!0,
 				// url: '',
 				MUSIC_LIST_SHOW_FLAG: false,
+				mp3: '',
+				lyric: '',
 
 			}
 		},
@@ -80,11 +80,24 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'playing_status','playing_current_time','music_total_time','_get_music_data','_play_list','current_music_play'
-			])
+			 	'playing_status','playing_current_time','music_total_time','_play_list','current_music_play'
+			]),
+			_disabled(){
+				return this._play_list.length != 0 ? false : true;
+			}
+			// _music_id(){
+			// 	this._get_music_url();
+			// 	return this.current_music_play.id;
+			// }
 		},
 		watch:{
-
+			'current_music_play':{
+				handler(val,old){
+					if(val.id != old.id){
+						this._get_music_url();
+					}
+				},deep: true
+			}
 		},
 		methods:{
 			_init_scroll(){
@@ -95,32 +108,38 @@
 			_get_music_url(){
 				// this.$store.commit('_set_music' ,{url: mp3});
 				// this.url = mp3;
-				
-				this.$nextTick(()=>{
-					if( !my_audio.src ){
-						this.$store.commit('_set_music_total_time' ,100);
-						this.$store.commit('_set_playing_current_time' ,0);
-						return;
-					}
-
-					console.log(my_audio.src)
-					my_audio.loadstart = ()=>{
-						console.log(my_audio.readyState);
-						if(my_audio.readyState == 0){
-							this.$store.commit('_set_music_total_time' ,0);
-							console.log(1)
+				this.$api.get(this.ApiPath.song.url,{
+					id: this.current_music_play.id
+				},success=>{
+					this.mp3 = success.data.data[0].url;
+					this.$nextTick(()=>{
+						if( !my_audio.src ){
+							this.$store.commit('_set_music_total_time' ,100);
+							this.$store.commit('_set_playing_current_time' ,0);
 							return;
 						}
-					}
-					my_audio.oncanplay = ()=> {  
-						this.$store.commit('_set_music_total_time' ,my_audio.duration );
-					}
-				})
+
+						this._play();
+						this._get_lyric();
+						my_audio.loadstart = ()=>{
+							console.log(my_audio.readyState);
+							if(my_audio.readyState == 0){
+								this.$store.commit('_set_music_total_time' ,0);
+								console.log(1)
+								return;
+							}
+						}
+						my_audio.oncanplay = ()=> {  
+							this.$store.commit('_set_music_total_time' ,my_audio.duration );
+						}
+					})
+				});
 			},
 			_play(){
-				if (!my_audio.src) 
-			      	alert(this._GLOBAL.msg.MUSIC_ERROR);
+				if (!my_audio.src) {
+			      	this.$alert(this._GLOBAL.msg.MUSIC_ERROR);
 			      	return;
+				}
 
 				this.$store.commit('_set_playing_status',true);
 				this.is_play = true;
@@ -143,6 +162,14 @@
 				this.is_play = false;
 				my_audio.pause();
 				clearInterval(my_audio_timer);
+			},
+			// 获取歌词
+			_get_lyric(){
+				this.$api.get(this.ApiPath.lyric,{
+					id: this.current_music_play.id
+				},success=>{
+					this.lyric = success.data.lrc.lyric;
+				})
 			},
 			// 播放进度
 			_music_progress(){

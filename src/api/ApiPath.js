@@ -22,5 +22,7 @@ export default{
 	},
 	check:{
 		music: '/check/music'
-	}
+	},
+	lyric: '/lyric',
+	
 }

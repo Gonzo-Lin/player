@@ -15,4 +15,27 @@ exports.install = function (Vue, options) {
 		_second = parseInt(value % 60 );
 		return `${_minues}:${_second < 10 ? '0'+_second : _second}`
 	})
+
+	// 格式化数字
+	Vue.filter('_format_count',(value)=>{
+		if (!value) return '0';
+		
+		let countLength = parseFloat((value + "").replace(/[^\d\.-]/g, "")).toFixed(0).length;
+		if(countLength < 5 ) return value;
+		var count,cutstr;
+		if(countLength < 9 ){
+			cutstr = (value/10000).toFixed(2) ;
+			count = cutstr + ' 万';
+		}else{
+			cutstr = (value/100000000).toFixed(2) ;
+			count = cutstr + ' 亿';
+		}
+
+
+
+
+		return count;
+	})
+
+	
 }

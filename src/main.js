@@ -15,6 +15,10 @@ import 'typeface-roboto';
 import Message from 'muse-ui-message';
 
 
+import VueLazyLoad from 'vue-lazyload'
+
+
+
 import './style/base/_color.scss';
 import './style/base/_mixin.scss';
 import './style/base/_reset.scss';
@@ -30,6 +34,7 @@ import _GLOBAL from "@/config"
 // 引用工具
 import filters from './utils/filters.js';
 
+
 //挂载到Vue实例上面
 Vue.prototype.$api = api
 Vue.prototype.ApiPath = ApiPath
@@ -39,6 +44,7 @@ Vue.prototype._GLOBAL = _GLOBAL
 Vue.use(MuseUI);
 Vue.use(filters);
 Vue.use(Message);
+Vue.use(VueLazyLoad)
 
 /* eslint-disable no-new */
 new Vue({

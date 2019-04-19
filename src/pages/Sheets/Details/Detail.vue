@@ -6,8 +6,11 @@
 			
 			<mu-list>
 				<template v-for="list,key in sheet_data['tracks']" >
-					<mu-list-item button @click="_handler_music(list)">
-						<mu-list-item-title>{{ list.name }}</mu-list-item-title>
+					<mu-list-item button @click.native="_handler_music(list,key)" :class="privileges[key].st == '-100' ? 'disabled' : ''">
+						<mu-list-item-content class="pt-7 pb-7">
+							<mu-list-item-title>{{ list.name }}</mu-list-item-title>
+							<mu-list-item-sub-title>{{ list.ar[0].name + ' - ' + list.al.name }}</mu-list-item-sub-title>
+						</mu-list-item-content>
 					</mu-list-item>
 					<mu-divider></mu-divider>
 				</template>
@@ -22,7 +25,8 @@
 		name: "SheetsDetail",
 		data(){
 			return {
-				sheet_data:{}
+				sheet_data: {},
+				privileges: [],
 
 			}
 		},
@@ -60,6 +64,7 @@
 					id: this.$route.params.id
 				},success=>{
 					this.sheet_data = success.data.playlist;
+					this.privileges = success.data.privileges;
 					// this.sheet_data.tracks.map(list=>{
 					// 	this._check_music(list.id);
 					// })
@@ -74,15 +79,16 @@
 					console.log(fail)
 				})
 			},
-			_handler_music(item){
-				this.$store.commit('_set_play_list', { tracks: this.sheet_data.tracks, id: this.sheet_data.id });
-				var song = '';
-				item['ar'].map((s,k)=>{
-					song+=(s.name+ (k>1 ? '/': ''));
-				});
-				this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl})
+			_handler_music(item,index){
+				if(this.privileges[index].st == '-100'){
+					this.$alert(this._GLOBAL.msg.ST_100_ERROR);
+					return;
+				}
 
-				this._check_music(item.id)
+				this.$store.commit('_set_play_list', { tracks: this.sheet_data.tracks, id: this.sheet_data.id ,privileges: this.privileges });
+				
+
+				this._check_music(item)
 				// this._get_song_url(item.id);
 				// this.$store.action('_set_music_data',{url: list})
 			},
@@ -96,14 +102,17 @@
 					console.log(fail);
 				})
 			},
-			_check_music(id){
+			_check_music(item){
 				this.$api.get(this.ApiPath.check.music,{
-					id: id
+					id: item.id
 				},success=>{
-					console.log(success.data)
+					var song = '';
+					item['ar'].map((s,k)=>{
+						song+=(s.name+ (k>1 ? '/': ''));
+					});
+					this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl})
 				},fail=>{
-					this.$alert(fail.data.message );
-					// console.error(fail);
+					this.$alert('发生未知错误');
 				})
 			},
 		},
@@ -117,13 +126,23 @@
 </script>
 
 <style lang="scss" scoped>
+@import '@/style/base/_color.scss';
+
 .sheets_hots_wrap{
 	position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
-	bottom: 0;
+	bottom: 65px;
 	background: white;
 	z-index: 9;
+}
+.disabled{
+	/deep/ .mu-item{
+		color: $_disabled;
+	}
+}
+/deep/ .mu-item {
+	height: auto;
 }
 </style>

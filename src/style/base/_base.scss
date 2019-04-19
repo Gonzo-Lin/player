@@ -163,3 +163,11 @@ $_default_px: 1px !default;
 }
 
 
+.clearfix{
+	&:after {
+		display: block;
+		content: "";
+		clear: both;
+		font-size: 0;
+	}
+}

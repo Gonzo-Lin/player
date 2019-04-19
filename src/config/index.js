@@ -18,5 +18,6 @@ export default{
 	},
 	msg:{
 		MUSIC_ERROR: '音乐播放错误！',
+		ST_100_ERROR: '由于版权保护，您所在的地区暂时无法使用。',
 	}
 }

@@ -20,17 +20,12 @@
 			</section>
 			<section class="music_list_wrap_scroll" ref="music_list_wrap_scroll">
 				<mu-list >
-					<template v-for="item in _play_list">
-						<mu-list-item button class="music_list_item" @click.native="select_music(item)">
+					<template v-for="item,key in _play_list">
+						<mu-list-item :button="_privileges[key].st == '-100' ? false : true" @click.native="select_music(item)" :class="['music_list_item' , _privileges[key].st == '-100' ? 'disabled' : '']">
 							<mu-list-item-content class="pt-7 pb-7">
 								<mu-list-item-title>{{ item.name }}</mu-list-item-title>
 								<mu-list-item-sub-title>{{ item.ar[0].name + ' - ' + item.al.name }}</mu-list-item-sub-title>
 							</mu-list-item-content>
-							<!-- <mu-list-item-title>{{ item.name }} <span class="music_list_item_singer">- </span></mu-list-item-title> -->
-
-							<!-- <mu-list-item-action>
-								<mu-icon value="chat_bubble"></mu-icon>
-							</mu-list-item-action> -->
 						</mu-list-item>
 						<mu-divider />
 					</template>
@@ -81,7 +76,7 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'play_mode','_play_list'
+			 	'play_mode','_play_list','_privileges'
 			])
 		},
 		watch:{
@@ -110,10 +105,9 @@
 				this.$api.get(this.ApiPath.check.music,{
 					id: id
 				},success=>{
-					return fail.success
+					console.log(success.data)
 				},fail=>{
-					this.$alert(fail.data.message );
-					return fail.success
+					this.$alert(fail.message );
 					// console.error(fail);
 				})
 			},
@@ -183,4 +177,9 @@
     }
 }
 
+.disabled{
+	/deep/ .mu-item{
+		color: $_disabled;
+	}
+}
 </style>
