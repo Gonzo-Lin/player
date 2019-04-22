@@ -76,9 +76,11 @@
 
 					<section :class="['music_main_page_2' , !main_page_show ? 'main_page_show' : '' ]" @click="main_page_show = !main_page_show">
 						<div class="music_lyric_wrap" ref="lyric_list">
-							<ul>
-								<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}{{ line.time }}</li>
-							</ul>
+							<div>
+								<ul>
+									<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}{{ line.time }}</li>
+								</ul>
+							</div>
 						</div>
 					</section>
 				</div>
@@ -237,9 +239,9 @@
 			},
 			_init_lyric(){
 				this.current_lyric = new Lyric(this.lyric,this.handler_lyric);
-				if(this.playing_status){
+				// if(this.playing_status){
 					this.current_lyric.play();
-				}
+				// }
 				
 			},
 			handler_lyric({lineNum,txt}){
@@ -249,10 +251,10 @@
 				if(lineNum > 5){
 					let line_el = this.$refs.lyric_line[lineNum-5];
 					console.log(line_el)
-					// this.$refs.lyric_list.scrollToElement(line_el,1000);
+					this.lyric_scroll.scrollToElement(line_el,1000);
 				}else{
-					console.log(this.$refs.lyric_list)
-					// this.$refs.lyric_list.scrollToElement(0,0,1000);
+					console.log(this.lyric_scroll)
+					this.lyric_scroll.scrollToElement(0,1000);
 				}
 				this.playingLyric = txt
 			},
