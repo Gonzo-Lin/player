@@ -3,7 +3,7 @@
 
         <audio :src="mp3" controls="" ref="myAudio" class="my_audio" id="my_audio" />
 
-		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :lyric="lyric" v-show="_disabled"
+		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :lyrics="lyric" v-show="_disabled"
 			@_play = "_play" 
 			@_paused = "_paused"
 			@_music_list_flag = "_music_list_flag"
@@ -61,21 +61,23 @@
 		},
 		mounted(){
 			my_audio = document.getElementById("my_audio");
-			this._get_music_url();
-			this.$nextTick(()=>{
-				var _playing_status = this.$store.getters.playing_status;
-				if( this.$store.getters.playing_current_time != null || this.$store.getters.playing_current_time != 0 ){
-					this._progress_change(Number(this.$store.getters.playing_current_time));
-					this.$store.commit('_set_playing_status',_playing_status);
-				}
+			if( 'id' in this.current_music_play){
+				this._get_music_url();
+				this.$nextTick(()=>{
+					var _playing_status = this.$store.getters.playing_status;
+					if( this.$store.getters.playing_current_time != null || this.$store.getters.playing_current_time != 0 ){
+						this._progress_change(Number(this.$store.getters.playing_current_time));
+						this.$store.commit('_set_playing_status',_playing_status);
+					}
 
-				// if(this.$store.getters.playing_status){
-				// 	this.$nextTick(()=>{
-				// 		// console.log(this.$store.getters.playing_current_time)
-				// 		this._play();
-				// 	})
-				// }
-			})
+					// if(this.$store.getters.playing_status){
+					// 	this.$nextTick(()=>{
+					// 		// console.log(this.$store.getters.playing_current_time)
+					// 		this._play();
+					// 	})
+					// }
+				})
+			}
 		},
 		computed:{
 			...mapGetters([
@@ -120,7 +122,7 @@
 						}
 
 						this._play();
-						this._get_lyric();
+						// this._get_lyric();
 						my_audio.loadstart = ()=>{
 							console.log(my_audio.readyState);
 							if(my_audio.readyState == 0){
@@ -164,13 +166,13 @@
 				clearInterval(my_audio_timer);
 			},
 			// 获取歌词
-			_get_lyric(){
-				this.$api.get(this.ApiPath.lyric,{
-					id: this.current_music_play.id
-				},success=>{
-					this.lyric = success.data.lrc.lyric;
-				})
-			},
+			// _get_lyric(){
+			// 	this.$api.get(this.ApiPath.lyric,{
+			// 		id: this.current_music_play.id
+			// 	},success=>{
+			// 		this.lyric = success.data.lrc.lyric;
+			// 	})
+			// },
 			// 播放进度
 			_music_progress(){
 				this.$store.commit('_set_playing_current_time',my_audio.currentTime);

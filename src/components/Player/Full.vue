@@ -75,7 +75,10 @@
 					</section>
 
 					<section :class="['music_main_page_2' , !main_page_show ? 'main_page_show' : '' ]" @click="main_page_show = !main_page_show">
-						<div class="music_lyric_wrap" v-html="lyric">
+						<div class="music_lyric_wrap" ref="lyric_list">
+							<ul>
+								<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}{{ line.time }}</li>
+							</ul>
 						</div>
 					</section>
 				</div>
@@ -147,16 +150,18 @@
 <script>
 	import {mapGetters} from 'vuex';
 	import MyProgress from '@/components/Player/Progress.vue';
+	import Lyric from 'lyric-parser';
+	import BScroll from 'better-scroll';
 
 	import eventVue from '../../utils/event.js';
 	export default{
 		name: 'full_player',
 		props:{
 			MUSIC_LIST_SHOW_FLAG: false,
-			lyric: {
-				type: String,
-				value: '',
-			}
+			// lyric: {
+			// 	type: String,
+			// 	value: '',
+			// }
 		},
 		data(){
 			return{
@@ -165,10 +170,19 @@
 				// play_mode: this._GLOBAL.config.default_play_mode,
 
 				url: 'https://y.gtimg.cn/music/photo_new/T002R300x300M000004ex2Wu3qLZvz.jpg?max_age=2592000',
+
+				lyric: '',
+				current_lyric: {},
+				current_line_num: 0,
+				current_song: {},
 			}
 		},
 		mounted(){
 			this._show_full_player();
+			if('timer' in this.current_lyric){
+				this.current_lyric.stop();
+			}
+			this._get_lyric();
 			this.$nextTick(()=>{
 			})
 		},
@@ -179,6 +193,13 @@
 			])
 		},
 		watch:{
+			playing_current_time:{
+				handler(new_s,old_s){
+					if(new_s !== old_s){
+						this._init_lyric();
+					}
+				}
+			}
 			
 		},
 		methods:{
@@ -202,7 +223,48 @@
 			_siblings_get_progress_change(data){
 				this.$emit('_progress_change',data);
 			},
-			
+			// 获取歌词
+			_get_lyric(){
+				this.$api.get(this.ApiPath.lyric,{
+					id: this.current_music_play.id
+				},success=>{
+					this.lyric = success.data.lrc.lyric;
+					this._init_lyric();
+					this.$nextTick(()=>{
+						this._init_lyric_scroll();
+					})
+				})
+			},
+			_init_lyric(){
+				this.current_lyric = new Lyric(this.lyric,this.handler_lyric);
+				if(this.playing_status){
+					this.current_lyric.play();
+				}
+				
+			},
+			handler_lyric({lineNum,txt}){
+				this.current_line_num = lineNum;
+				console.log(lineNum)
+				console.log(txt)
+				if(lineNum > 5){
+					let line_el = this.$refs.lyric_line[lineNum-5];
+					console.log(line_el)
+					// this.$refs.lyric_list.scrollToElement(line_el,1000);
+				}else{
+					console.log(this.$refs.lyric_list)
+					// this.$refs.lyric_list.scrollToElement(0,0,1000);
+				}
+				this.playingLyric = txt
+			},
+			_init_lyric_scroll(){
+				if(!this.lyric_scroll){
+					this.lyric_scroll = new BScroll(this.$refs.lyric_list,{
+						click: true,
+					})
+				}else{
+					this.lyric_scroll.refresh();
+				}
+			},
 
 
 
@@ -244,7 +306,7 @@
 			right: 0;
 			top: 0;
 			bottom: 0;
-			overflow: hidden;
+			/*overflow: hidden;*/
 			opacity: 0;
 			transition: all .3s;
 		}
@@ -255,6 +317,9 @@
 				left: 0;
 				right: 0;
 			}
+		}
+		.music_main_page_2{
+			overflow: hidden;
 		}
 	}
 	.full_player_bottom{
@@ -269,8 +334,21 @@
 	}
 	.music_lyric_wrap{
 		white-space: pre-wrap;
+		height: 100%;
+		overflow: hidden;
 	}
 	.main_page_show{
 		opacity: 1!important;
+	}
+
+
+	.lyric_text{
+		color: white;
+		line-height: 1.5;
+		margin-bottom: 10px;
+		color: #ccc;
+		&.active{
+			color: #fff;
+		}
 	}
 </style>

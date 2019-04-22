@@ -25,7 +25,7 @@
 							</div>
 							<span slot="title" class="f-12 text_left">{{ sheet.name | text_loading}}</span>
 							<span slot="subTitle" class="f-12 text_left primary">by <b class="white">{{ sheet.creator['nickname'] | text_loading }}</b></span>
-							<mu-button slot="action" icon @click.stop="_player_sheets(sheet.id)">
+							<mu-button slot="action" icon @click.stop="_player_sheets(sheet)">
 								<mu-icon value="play_circle_outline"></mu-icon>
 							</mu-button>
 						</mu-grid-tile>
@@ -111,6 +111,29 @@
 				console.log(id);
 
 			},
+
+			// 获取歌单内容
+			_get_sheets_details(){
+				this.$api.get(this.ApiPath.sheets.getSheetDetail,{
+					id: this.$route.params.id
+				},success=>{
+					this.sheet_data = success.data.playlist;
+					this.privileges = success.data.privileges;
+					// this.sheet_data.tracks.map(list=>{
+					// 	this._check_music(list.id);
+					// })
+
+
+					this.$nextTick(()=>{
+						this._init_sheet_detail_scroll();
+
+						// console.log(this.sheet_data)
+					})
+				},fail=>{
+					console.log(fail)
+				})
+			},
+
 			// 更多，分页
 			_load_more(){
 				this.$api.get(this.ApiPath.top.playlist,{

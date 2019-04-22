@@ -57,7 +57,7 @@ function iApiAxios (method, url, params, success, failure) {
   })
   .catch((err)=>{
     let res = err.response;
-    failure ? failure(res) : Message.alert(res.data.message);
+    failure ? failure(res) : Message.alert(res ? res.data.message : err);
     // if(failure) failure(res);
     // if (!failure) {
     //   // Message.alert('api error, HTTP CODE: ' + ('code' in err ? res.code : res.status ))
@@ -77,7 +77,7 @@ axios.interceptors.request.use(function (config) {
      // 如果是get请求就拼到params里面
      config.params = {
       ...config.params,
-      // proxy: 'http://127.0.0.1:54599',
+      proxy: 'http://127.0.0.1:54599',
     }
     return config;
   }, function (error) {
