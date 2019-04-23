@@ -33,6 +33,7 @@ import _GLOBAL from "@/config"
 
 // 引用工具
 import filters from './utils/filters.js';
+import base from './utils/base.js';
 
 
 //挂载到Vue实例上面
@@ -41,6 +42,7 @@ Vue.prototype.ApiPath = ApiPath
 Vue.prototype._GLOBAL = _GLOBAL
 
 
+Vue.use(base);
 Vue.use(MuseUI);
 Vue.use(filters);
 Vue.use(Message);

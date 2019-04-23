@@ -68,7 +68,6 @@
 		},
 		mounted(){
 			this.$nextTick(()=>{
-
 				this._show_mini_player();
 				this._get_progress_change();
 			})

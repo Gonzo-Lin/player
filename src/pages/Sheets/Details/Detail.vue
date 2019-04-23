@@ -1,8 +1,37 @@
 <template>
 	<div class="sheets_hots_wrap" ref="sheet_detail">
 		<div>
-			<img :src="sheet_data['coverImgUrl']" class="img_auto">
-			<p>播放量：{{sheet_data.playCount | text_loading}}</p>
+			<div class="detail_head" >
+				<div class="img_bg">
+					<img :src="sheet_data['coverImgUrl']" class="img_auto">
+					<div class="mask"></div>
+				</div>
+				<div class="thumb">
+					<img :src="sheet_data['coverImgUrl']" class="img_auto">
+					<div class="play_count">
+						<span class="headset">
+							<mu-icon value="headset"></mu-icon>
+							{{sheet_data.playCount | text_loading}}
+						</span>
+					</div>
+				</div>
+				<div class="sheet_main">
+					<h3>{{ sheet_data.name }}</h3>
+					<div class="creator">
+						<router-link to="" class="link" >
+							<mu-avatar size="24">
+								<img :src="'creator' in sheet_data ? sheet_data.creator.avatarUrl : ''">
+							</mu-avatar>
+							<span class="nickname">{{ 'creator' in sheet_data ? sheet_data.creator.nickname : '' | text_loading }} </span>
+							<mu-icon value="chevron_right" class="link_icon"/>
+						</router-link>
+					</div>
+					<div class="tags">
+						<mu-badge :content="tag" color="red" :class="{'mr-5' : key != sheet_data.tags.length-1}" v-for="tag,key in sheet_data.tags"></mu-badge>
+					</div>
+				</div>
+				<!-- <p>播放量：{{sheet_data.playCount | text_loading}}</p> -->
+			</div>
 			
 			<mu-list>
 				<template v-for="list,key in sheet_data['tracks']" >
@@ -127,6 +156,7 @@
 
 <style lang="scss" scoped>
 @import '@/style/base/_color.scss';
+@import '@/style/base/_mixin.scss';
 
 .sheets_hots_wrap{
 	position: fixed;
@@ -144,5 +174,87 @@
 }
 /deep/ .mu-item {
 	height: auto;
+}
+
+.detail_head{
+	display: flex;
+	padding: 10px;
+	justify-content:center;
+	align-items:center;
+	position: relative;
+	overflow: hidden;
+	color: white;
+	.img_bg{
+		z-index: -1;
+		width: 100%;
+        position: absolute;
+        top: 0;
+        transform: translateY(-25%);
+        img{
+            -webkit-filter: blur(4px);
+            -moz-filter: blur(4px);
+            -ms-filter: blur(4px);
+            -o-filter: blur(4px);
+            filter: blur(4px); 
+        }
+    }
+    .mask{
+    	position: absolute;
+    }
+	.thumb{
+		width: 150px;
+		margin-right: 10px;
+		position: relative;
+	}
+	.sheet_main{
+		flex: 1;
+		text-align: left;
+		.creator{
+			margin: 10px 0 0 0;
+			*{
+				vertical-align: middle;
+			}
+			.nickname{
+				color: white;
+				/*color: #333;*/
+			}
+			.link{
+				position: relative;
+				.link_icon{
+					position: absolute;
+					right: -24px;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+			}
+		}
+		.tags{
+			margin-top: 10px;
+		}
+	}
+}
+
+.link_icon{
+	color: #ccc;
+}
+
+.play_count{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+    height: 100%;
+	@include shadow-inset(0, 20px, 20px, rgba(0,0,0,.5));;
+	.headset{
+		position: absolute;
+		right: 5px;
+		top: 5px;
+		font-size: 12px;
+		vertical-align: middle;
+		i{
+			font-size: 11px;
+			vertical-align: middle;
+		}
+	}
 }
 </style>

@@ -83,13 +83,7 @@
                     filter: blur(4px); 
                 }
             }
-            .mask{
-                /*display: none;*/
-                background-image: unset;
-                background-color: rgba(0,0,0,1);
-                /*background: #333;*/
-                opacity: .64;
-            }
+            
         }
         .img_bg{
             position: absolute;
@@ -107,13 +101,7 @@
                 width: 100%;
             }
         }
-        .mask{
-            position: absolute;
-            opacity: .6;
-            height: 100%;
-            @include linear-gradient($primary , $special , 145deg);
-            /*@include linear-gradient($primary 0%, $special 100%, 145deg);*/
-        }
+        
     }
     .music_main{
         h5{
@@ -139,7 +127,7 @@
             }
         }
         .music_thumb{
-            margin: 15px auto;
+            margin: 30px auto;
             .music_thumb_bg{
                 width: 300px;
                 height: 300px;
@@ -175,6 +163,9 @@
                     transform: translate(calc( 50% - 3.5px ),-50%);
                 }
             }
+        }
+        .music_lyric{
+            margin: 30px 0;
         }
     }
 }

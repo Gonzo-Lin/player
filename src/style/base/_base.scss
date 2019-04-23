@@ -145,7 +145,7 @@ $_default_px: 1px !default;
 }
 
 .radius-5{
-	@inlcude rounded(5px);
+	@include rounded(5px);
 	overflow: hidden;
 }
 
@@ -159,7 +159,7 @@ $_default_px: 1px !default;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(0,0,0,.3);
+	background: rgba(0,0,0,.5);
 }
 
 
@@ -171,3 +171,6 @@ $_default_px: 1px !default;
 		font-size: 0;
 	}
 }
+
+
+

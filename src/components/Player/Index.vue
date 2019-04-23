@@ -6,6 +6,7 @@
 		<full :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" :lyrics="lyric" v-show="_disabled"
 			@_play = "_play" 
 			@_paused = "_paused"
+			@_next = "_next"
 			@_music_list_flag = "_music_list_flag"
 			@_progress_change = "_progress_change"  >
 		</full>
@@ -22,6 +23,7 @@
 		<!-- 播放列表 -->
 		<div class="mask z-9" v-show="MUSIC_LIST_SHOW_FLAG" @click="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG"></div>
 		<music-list :MUSIC_LIST_SHOW_FLAG="MUSIC_LIST_SHOW_FLAG" 
+			@select_music="select_music"
 			@hide_music_list="MUSIC_LIST_SHOW_FLAG = !MUSIC_LIST_SHOW_FLAG">
 		</music-list>
 
@@ -42,6 +44,7 @@
 	const PLAYER_STATUS = !!0;
 	var CURRENT_TIME = 0;
 	var my_audio,my_audio_timer,_progress_change_fun = null;
+	var _music_flag = true;
 
 	export default{
 		name: "my_player",
@@ -82,7 +85,7 @@
 		computed:{
 			...mapGetters([
 			 	//此处的 play_mode 与以下 store.js 文件中 getters 内的 play_mode 相对应
-			 	'playing_status','playing_current_time','music_total_time','_play_list','current_music_play'
+			 	'playing_status','playing_current_time','music_total_time','_play_list','current_music_play','play_mode','_privileges'
 			]),
 			_disabled(){
 				return this._play_list.length != 0 ? false : true;
@@ -193,6 +196,7 @@
 
 				if(this.$store.getters.playing_current_time == this.$store.getters.music_total_time){
 					this.$store.commit('_set_playing_current_time',0);
+					this._next();
 				}
 
 			},
@@ -202,11 +206,72 @@
 				this.$store.commit('_set_playing_status',false);
 				my_audio.pause();
 				clearInterval(my_audio_timer);
-				my_audio.currentTime = value
+				my_audio.currentTime = value;
+
+				if('timer' in this.$children[0].current_lyric){
+					this.$children[0].current_lyric.seek(value * 1000)
+				}
+
 			},
 			_music_list_flag(){
 				this.MUSIC_LIST_SHOW_FLAG = !this.MUSIC_LIST_SHOW_FLAG
-			}
+			},
+			// 播放下一首
+			_next(){
+				var _item = {},_index = 0;
+				switch(this.play_mode){
+					case 0:
+					default:
+						_index = this.random_num(1,this._play_list.length);
+						_item = this._play_list[_index];
+
+						this.select_music({item:_item,index:_index});
+						break;
+					case 1:
+						_index = this.current_music_play.index;
+						_item = this._play_list[_index];
+						this.select_music({item:_item,index:_index});
+						break;
+					case 2:
+						_index = this.current_music_play.index+1;
+						_item = this._play_list[_index];
+						this.select_music({item:_item,index:_index});
+						break;
+				}
+				console.log(this._play_list[_index])
+			},
+			// 选择音乐播放
+			select_music(_data){
+				var item = _data.item;
+				var song = '';
+
+				item['ar'].map((s,k)=>{
+					song+=(s.name+ (k>1 ? '/': ''));
+				});
+				
+				this._check_music(_data);
+
+
+
+
+			},
+			_check_music(_data){
+
+				if(this._privileges[_data.index].st == '-100'){
+					this.$alert(this._GLOBAL.msg.ST_100_ERROR);
+					return;
+				}
+
+				var item = _data.item;
+
+				this.$api.get(this.ApiPath.check.music,{
+					id: item.id
+				},success=>{
+					this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl, index: _data.index})
+				},fail=>{
+					this.$alert(fail.data.message)
+				})
+			},
 
 			
 

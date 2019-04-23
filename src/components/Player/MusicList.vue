@@ -21,7 +21,7 @@
 			<section class="music_list_wrap_scroll" ref="music_list_wrap_scroll">
 				<mu-list >
 					<template v-for="item,key in _play_list">
-						<mu-list-item :button="_privileges[key].st == '-100' ? false : true" @click.native="select_music(item)" :class="['music_list_item' , _privileges[key].st == '-100' ? 'disabled' : '']">
+						<mu-list-item :button="_privileges[key].st == '-100' ? false : true" @click.native="select_music(item,key)" :class="['music_list_item' , _privileges[key].st == '-100' ? 'disabled' : '']">
 							<mu-list-item-content class="pt-7 pb-7">
 								<mu-list-item-title>{{ item.name }}</mu-list-item-title>
 								<mu-list-item-sub-title>{{ item.ar[0].name + ' - ' + item.al.name }}</mu-list-item-sub-title>
@@ -89,28 +89,30 @@
 				})
 			},
 			// 选择音乐播放
-			select_music(item){
-				var song = '';
-				item['ar'].map((s,k)=>{
-					song+=(s.name+ (k>1 ? '/': ''));
-				});
+			select_music(item,index){
+				this.$emit('select_music',{item: item, index: index});
+				return;
+				// var song = '';
+				// item['ar'].map((s,k)=>{
+				// 	song+=(s.name+ (k>1 ? '/': ''));
+				// });
 				
-				this._check_music(item.id);
+				// this._check_music(item.id);
 
 
-				this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl})
+				// this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl})
 
 			},
-			_check_music(id){
-				this.$api.get(this.ApiPath.check.music,{
-					id: id
-				},success=>{
-					console.log(success.data)
-				},fail=>{
-					this.$alert(fail.message );
-					// console.error(fail);
-				})
-			},
+			// _check_music(id){
+			// 	this.$api.get(this.ApiPath.check.music,{
+			// 		id: id
+			// 	},success=>{
+			// 		console.log(success.data)
+			// 	},fail=>{
+			// 		this.$alert(fail.message );
+			// 		// console.error(fail);
+			// 	})
+			// },
 
 			// 收藏全部
 			collect_all(){

@@ -34,19 +34,19 @@
 							<div class="music_thumb_bg">
 								<img :src="current_music_play.thumb" :class="['img_auto' , playing_current_time == 0 ? '' : ( playing_status ? 'play_start' : 'play_stop' )]">
 								<div class="like" >
-									<mu-button icon fab small  class="like_btn">
+									<mu-button icon fab small  class="like_btn" @click.stop="like">
 										<mu-icon value="favorite"></mu-icon>
 								    </mu-button>
 								</div>
 								<div class="unlike">
-									<mu-button icon fab small  class="unlike_btn" >
+									<mu-button icon fab small  class="unlike_btn" @click.stop="unlike">
 										<mu-icon value="favorite_border"></mu-icon>
 								    </mu-button>
 								</div>
 							</div>
 						</div>
 						<div class="music_lyric">
-							<p>I can pay for everything</p>
+							<p>{{ ( 'lines' in current_lyric ? current_lyric.lines[current_line_num].txt : '' ) | text_loading }}</p>
 						</div>
 
 						<div class="_top_btn_wrap">
@@ -78,7 +78,7 @@
 						<div class="music_lyric_wrap" ref="lyric_list">
 							<div>
 								<ul>
-									<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}{{ current_line_num }}{{ index }}</li>
+									<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}</li>
 								</ul>
 							</div>
 						</div>
@@ -128,7 +128,7 @@
 							</mu-flex>
 
 							<mu-flex justify-content="center" fill>
-								<mu-button icon >
+								<mu-button icon  @click.native="next">
 									<mu-icon value="fast_forward"></mu-icon>
 							    </mu-button>
 							</mu-flex>
@@ -177,6 +177,7 @@
 				current_lyric: {},
 				current_line_num: 0,
 				current_song: {},
+				playing_lyric: 'sdfsdfsd',
 			}
 		},
 		mounted(){
@@ -205,16 +206,21 @@
 			},
 			playing_status:{
 				handler(val,old){
-					// if(val){
+					if(val !== old){
 						this.current_lyric.togglePlay();
-					// }
+					}
 				},
 				deep: true
 			},
 			current_music_play:{
 				handler(val,old){
-					if(val.id !== old.id){
-						this._get_lyric();
+					if(val.id != old.id){
+						this.current_lyric.seek(0);
+						this.current_lyric.stop();
+						this.$nextTick(()=>{
+							this._get_lyric();
+							this._play();
+						})
 					}
 				},deep: true
 			}
@@ -255,7 +261,6 @@
 			},
 			_init_lyric(){
 				this.current_lyric = new Lyric(this.lyric,this.handler_lyric);
-				console.log(this.current_lyric)
 				if(this.playing_status){
 					this.current_lyric.play();
 				}
@@ -263,14 +268,13 @@
 			},
 			handler_lyric({lineNum,txt}){
 				this.current_line_num = lineNum;
-				console.log(lineNum)
-				if(lineNum > 8){
-					let line_el = this.$refs.lyric_line[lineNum-8];
+				if(lineNum > 7){
+					let line_el = this.$refs.lyric_line[lineNum-7];
 					this.lyric_scroll.scrollToElement(line_el,1000);
 				}else{
 					this.lyric_scroll.scrollToElement(0,1000);
 				}
-				this.playingLyric = txt
+				this.playing_lyric = txt
 			},
 			_init_lyric_scroll(){
 				if(!this.lyric_scroll){
@@ -292,6 +296,18 @@
 				var _length = this._GLOBAL.config.play_mode.length-1;
 				this.$store.commit('_set_play_mode',_length);
 			},
+
+			// 下一首
+			next(){
+				this.$emit('_next');
+			},
+
+			like(){
+				this.$alert('like')
+			},
+			unlike(){
+				this.$alert('unlike')
+			}
 		},
 		filters:{
 			
@@ -325,6 +341,7 @@
 			/*overflow: hidden;*/
 			opacity: 0;
 			transition: all .3s;
+			visibility: hidden;
 		}
 		.music_main_page_1{
 			._top_btn_wrap{
@@ -355,6 +372,7 @@
 	}
 	.main_page_show{
 		opacity: 1!important;
+		visibility: visible!important;
 	}
 
 
@@ -367,4 +385,5 @@
 			color: #fff;
 		}
 	}
+
 </style>
