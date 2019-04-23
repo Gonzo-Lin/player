@@ -77,7 +77,7 @@ axios.interceptors.request.use(function (config) {
      // 如果是get请求就拼到params里面
      config.params = {
       ...config.params,
-      proxy: 'http://127.0.0.1:54599',
+      // proxy: 'http://127.0.0.1:54599',
     }
     return config;
   }, function (error) {

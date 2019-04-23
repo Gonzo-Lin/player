@@ -25,7 +25,7 @@
 							</div>
 							<span slot="title" class="f-12 text_left">{{ sheet.name | text_loading}}</span>
 							<span slot="subTitle" class="f-12 text_left primary">by <b class="white">{{ sheet.creator['nickname'] | text_loading }}</b></span>
-							<mu-button slot="action" icon @click.stop="_player_sheets(sheet)">
+							<mu-button slot="action" icon @click.stop="_player_sheets(sheet.id)">
 								<mu-icon value="play_circle_outline"></mu-icon>
 							</mu-button>
 						</mu-grid-tile>
@@ -85,8 +85,6 @@
 			_get_sheets_hots(){
 				this.$api.get(this.ApiPath.sheets.getHotSheet,{},success=>{
 					this.sheets_tags = success.data.tags
-				},fail=>{
-					console.log(fail)
 				})
 			},
 			_select_sheets_tag(tag){
@@ -113,9 +111,9 @@
 			},
 
 			// 获取歌单内容
-			_get_sheets_details(){
+			_get_sheets_details(sid){
 				this.$api.get(this.ApiPath.sheets.getSheetDetail,{
-					id: this.$route.params.id
+					id: sid
 				},success=>{
 					this.sheet_data = success.data.playlist;
 					this.privileges = success.data.privileges;
@@ -131,6 +129,33 @@
 					})
 				},fail=>{
 					console.log(fail)
+				})
+			},
+			// 选取音乐
+			_handler_music(item,index){
+				if(this.privileges[index].st == '-100'){
+					this.$alert(this._GLOBAL.msg.ST_100_ERROR);
+					return;
+				}
+
+				this.$store.commit('_set_play_list', { tracks: this.sheet_data.tracks, id: this.sheet_data.id ,privileges: this.privileges });
+				
+
+				this._check_music(item)
+				// this._get_song_url(item.id);
+				// this.$store.action('_set_music_data',{url: list})
+			},
+			_check_music(item){
+				this.$api.get(this.ApiPath.check.music,{
+					id: item.id
+				},success=>{
+					var song = '';
+					item['ar'].map((s,k)=>{
+						song+=(s.name+ (k>1 ? '/': ''));
+					});
+					this.$store.commit('_set_current_music_play' , { id : item.id, name: item.name , desc: song + '-' + item.al.name , thumb: item.al.picUrl})
+				},fail=>{
+					this.$alert('发生未知错误');
 				})
 			},
 

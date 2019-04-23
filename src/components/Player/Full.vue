@@ -78,7 +78,7 @@
 						<div class="music_lyric_wrap" ref="lyric_list">
 							<div>
 								<ul>
-									<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}{{ line.time }}</li>
+									<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}{{ current_line_num }}{{ index }}</li>
 								</ul>
 							</div>
 						</div>
@@ -198,9 +198,25 @@
 			playing_current_time:{
 				handler(new_s,old_s){
 					if(new_s !== old_s){
-						this._init_lyric();
+						// this._init_lyric();
 					}
-				}
+				},
+				deep: true
+			},
+			playing_status:{
+				handler(val,old){
+					// if(val){
+						this.current_lyric.togglePlay();
+					// }
+				},
+				deep: true
+			},
+			current_music_play:{
+				handler(val,old){
+					if(val.id !== old.id){
+						this._get_lyric();
+					}
+				},deep: true
 			}
 			
 		},
@@ -239,21 +255,19 @@
 			},
 			_init_lyric(){
 				this.current_lyric = new Lyric(this.lyric,this.handler_lyric);
-				// if(this.playing_status){
+				console.log(this.current_lyric)
+				if(this.playing_status){
 					this.current_lyric.play();
-				// }
+				}
 				
 			},
 			handler_lyric({lineNum,txt}){
 				this.current_line_num = lineNum;
 				console.log(lineNum)
-				console.log(txt)
-				if(lineNum > 5){
-					let line_el = this.$refs.lyric_line[lineNum-5];
-					console.log(line_el)
+				if(lineNum > 8){
+					let line_el = this.$refs.lyric_line[lineNum-8];
 					this.lyric_scroll.scrollToElement(line_el,1000);
 				}else{
-					console.log(this.lyric_scroll)
 					this.lyric_scroll.scrollToElement(0,1000);
 				}
 				this.playingLyric = txt

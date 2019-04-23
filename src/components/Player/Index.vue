@@ -95,7 +95,7 @@
 		watch:{
 			'current_music_play':{
 				handler(val,old){
-					if(val.id != old.id){
+					if(val.id !== old.id){
 						this._get_music_url();
 					}
 				},deep: true
@@ -120,8 +120,9 @@
 							this.$store.commit('_set_playing_current_time' ,0);
 							return;
 						}
-
-						this._play();
+						if(this.playing_status){
+							this._play();
+						}
 						// this._get_lyric();
 						my_audio.loadstart = ()=>{
 							console.log(my_audio.readyState);
