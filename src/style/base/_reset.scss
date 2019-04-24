@@ -1,57 +1,87 @@
 @charset "UTF-8";
 
 * {
-  tap-highlight-color: transparent;
-  -webkit-tap-highlight-color: transparent;
-  -ms-tap-highlight-color: transparent;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  outline: 0;
+	tap-highlight-color: transparent;
+	-webkit-tap-highlight-color: transparent;
+	-ms-tap-highlight-color: transparent;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	outline: 0;
 }
 
 a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font: inherit;
+	vertical-align: baseline;
 }
 
 ul, ol, li {
-  list-style: none;
+	list-style: none;
 }
 
 html {
-  margin: 0 auto;
-  height: 100%;
+	margin: 0 auto;
+	height: 100%;
 }
 body{
-  height: 100%;
-  background: white;
+	height: 100%;
+	background: white;
 }
 
 
 
 [v-cloak] {
-  display: none;
+	display: none;
 }
 
 image[lazy=loading] {
-  width: 40px;
-  height: 300px;
-  margin: auto;
+	width: 40px;
+	height: 300px;
+	margin: auto;
 }
 
 input[disabled], input:disabled, .input-disable {
-  cursor: default;
-  border: 1px solid #e2e2e2;
-  background-color: #ebebe4;
-  color: #000;
+	cursor: default;
+	border: 1px solid #e2e2e2;
+	background-color: #ebebe4;
+	color: #000;
 }
 
 
 
+
+.mu-grid-tile{
+	.img_wrap{
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		> img{
+			width: 100%;
+			top: 50%;
+			left: 0;
+			transform: translateY(-50%);
+			height: auto;
+			position: absolute;
+		}
+		
+	}
+	&.multiline{
+		.mu-grid-tile-titlebar{
+			height: auto;
+			padding: 7px 0;
+			.mu-grid-tile-title-container{
+				margin: 0 16px;
+			}
+			.mu-grid-tile-subtitle, .mu-grid-tile-title{
+				text-align: left;
+			}
+		}
+	}
+	
+}

@@ -14,7 +14,7 @@ export default{
 	},
 	top:{
 		playlist: '/top/playlist',
-		hightquality: '/top/playlist/highquality',
+		highquality: '/top/playlist/highquality',
 	},
 	song:{
 		url: '/song/url',

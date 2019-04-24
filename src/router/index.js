@@ -20,6 +20,11 @@ export default new Router({
 	      		component: Path.HotsSheets,
 	      	},
           {
+            path: 'highquality',
+            name: '精品歌单',
+            component: Path.HighQuality,
+          },
+          {
             path: 'details',
             name: '歌单详情',
             component: Path.SheetsDetails,
@@ -31,11 +36,11 @@ export default new Router({
           }
       	]
   	},
-    // {
-	   //  path: '/',
-	   //  name: 'Player',
-	   //  component: Player
-    // },
+    {
+	    path: '/',
+	    name: 'Index',
+	    component: Path.Index
+    },
     // {
     //   path: '*',
     //   name: 'Player',

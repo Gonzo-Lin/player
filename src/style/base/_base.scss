@@ -54,6 +54,16 @@ $_default_px: 1px !default;
 	}
 }
 
+$line_num_length: 5!default;
+@for $line_num from 0 through $line_num_length{
+	.text_overflow_#{$line_num}{
+		@include text_overflow($line_num);
+	}
+}
+
+
+
+
 .text_left{
 	text-align: left;
 }
@@ -174,3 +184,97 @@ $_default_px: 1px !default;
 
 
 
+.play_count{
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+    height: 100%;
+	@include shadow-inset(0, 20px, 30px, rgba(0,0,0,.5));;
+	.headset{
+		position: absolute;
+		right: 5px;
+		top: 5px;
+		font-size: 12px;
+		vertical-align: middle;
+		color: white;
+		i{
+			font-size: 12px;
+			vertical-align: middle;
+		}
+	}
+}
+
+
+.detail_head{
+	display: flex;
+	padding: 15px 10px;
+	justify-content:center;
+	align-items:center;
+	position: relative;
+	overflow: hidden;
+	color: white;
+	.img_bg{
+		z-index: -1;
+		width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        img{
+            -webkit-filter: blur(4px);
+            -moz-filter: blur(4px);
+            -ms-filter: blur(4px);
+            -o-filter: blur(4px);
+            filter: blur(4px); 
+        	transform: translateY(-25%);
+        }
+    }
+    .mask{
+    	position: absolute;
+    }
+	.thumb{
+		width: 130px;
+		margin-right: 10px;
+		position: relative;
+	}
+	.sheet_main{
+		flex: 1;
+		text-align: left;
+		>*{
+			margin: 10px 0 0 0;
+			&:first-child{
+				margin-top: 0;
+			}
+		}
+		.link{
+			*{
+				vertical-align: middle;
+			}
+		}
+		.creator{
+			> *{
+				vertical-align: middle;
+			}
+			.nickname{
+				color: white;
+				/*color: #333;*/
+			}
+			.link{
+				position: relative;
+				.link_icon{
+					position: absolute;
+					right: -24px;
+					top: 50%;
+					transform: translateY(-50%);
+				}
+			}
+		}
+		.copywriter{
+			font-size: 12px;
+			color: #ddd;
+		}
+		.tags{
+			margin-top: 10px;
+		}
+	}
+}

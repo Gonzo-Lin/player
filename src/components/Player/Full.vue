@@ -46,7 +46,7 @@
 							</div>
 						</div>
 						<div class="music_lyric">
-							<p>{{ ( 'lines' in current_lyric ? current_lyric.lines[current_line_num].txt : '' ) | text_loading }}</p>
+							<p>{{ ( 'lines' in current_lyric ? current_lyric.lines[current_line_num].txt : 'Sorry, no lyric found.' ) | text_loading }}</p>
 						</div>
 
 						<div class="_top_btn_wrap">
@@ -77,9 +77,10 @@
 					<section :class="['music_main_page_2' , !main_page_show ? 'main_page_show' : '' ]" @click="main_page_show = !main_page_show">
 						<div class="music_lyric_wrap" ref="lyric_list">
 							<div>
-								<ul>
+								<ul v-if="current_lyric.lines">
 									<li ref="lyric_line" v-for="(line,index) in current_lyric.lines" :class="[current_line_num===index ? 'active' : '', 'lyric_text']">{{line.txt}}</li>
 								</ul>
+								<div class="text_center mt-35" v-else>Sorry, no lyric found.</div>
 							</div>
 						</div>
 					</section>

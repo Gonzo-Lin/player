@@ -1,10 +1,8 @@
 <template>
 	<transition name="fadeInOut">
-		<div class="sheets_hots_wrap">
-			<keep-alive>
-				<router-view/>
-			</keep-alive>
-		</div>
+		<keep-alive>
+			<router-view/>
+		</keep-alive>
 	</transition>
 </template>
 

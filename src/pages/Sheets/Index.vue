@@ -1,10 +1,24 @@
 <template>
 	<div class="sheets_hots_wrap">
-		<router-link to="/sheets/hots"> hots </router-link>
-		<router-link to="/sheets/details"> details </router-link>
-		<keep-alive>
-			<router-view/>
-		</keep-alive>
+		<!-- <router-link to="/sheets/hots"> hots </router-link>
+		<router-link to="/sheets/details"> details </router-link> -->
+		<mu-appbar class="app_bar" color="red" z-depth="0">
+			<mu-button icon slot="left" @click="$router.go(-1)">
+				<mu-icon value="chevron_left"></mu-icon>
+			</mu-button>
+			<!-- 歌曲名 -->
+			歌单
+			<!-- {{ current_music_play.name }} -->
+			<!-- 歌曲名 -->
+			<mu-button flat slot="right">
+				<mu-icon value="more_horiz"></mu-icon>
+			</mu-button>
+		</mu-appbar>
+		<div class="sheets_hots_container">
+			<keep-alive>
+				<router-view/>
+			</keep-alive>
+		</div>
 	</div>
 </template>
 
@@ -40,5 +54,18 @@
 </script>
 
 <style lang="scss" scoped>
-
+.app_bar{
+	width: 100%;
+	color: white;
+}
+.sheets_hots_wrap{
+	height: 100%;
+	.sheets_hots_container{
+		height: calc(100% - 60px);
+		overflow: hidden;
+		> *{
+			height: 100%
+		}
+	}
+}
 </style>

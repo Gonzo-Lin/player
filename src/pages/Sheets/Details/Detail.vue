@@ -11,7 +11,7 @@
 					<div class="play_count">
 						<span class="headset">
 							<mu-icon value="headset"></mu-icon>
-							{{sheet_data.playCount | text_loading}}
+							<em>{{ sheet_data.playCount | _format_count | text_loading}}</em>
 						</span>
 					</div>
 				</div>
@@ -83,9 +83,12 @@
 				if(!this.sheet_detail_scroll){
 					this.sheet_detail_scroll = new BScroll(this.$refs.sheet_detail,{
 						click: true,
-					})
+					});
 				}else{
 					this.sheet_detail_scroll.refresh();
+					this.$nextTick(()=>{
+						this.sheet_detail_scroll.scrollTo(0,0);
+					})
 				}
 			},
 			_get_sheets_details(){
@@ -94,10 +97,6 @@
 				},success=>{
 					this.sheet_data = success.data.playlist;
 					this.privileges = success.data.privileges;
-					// this.sheet_data.tracks.map(list=>{
-					// 	this._check_music(list.id);
-					// })
-
 
 					this.$nextTick(()=>{
 						this._init_sheet_detail_scroll();
@@ -159,11 +158,11 @@
 @import '@/style/base/_mixin.scss';
 
 .sheets_hots_wrap{
-	position: fixed;
+	/*position: fixed;
 	left: 0;
 	top: 0;
 	right: 0;
-	bottom: 65px;
+	bottom: 65px;*/
 	background: white;
 	z-index: 9;
 }
@@ -176,85 +175,9 @@
 	height: auto;
 }
 
-.detail_head{
-	display: flex;
-	padding: 10px;
-	justify-content:center;
-	align-items:center;
-	position: relative;
-	overflow: hidden;
-	color: white;
-	.img_bg{
-		z-index: -1;
-		width: 100%;
-        position: absolute;
-        top: 0;
-        transform: translateY(-25%);
-        img{
-            -webkit-filter: blur(4px);
-            -moz-filter: blur(4px);
-            -ms-filter: blur(4px);
-            -o-filter: blur(4px);
-            filter: blur(4px); 
-        }
-    }
-    .mask{
-    	position: absolute;
-    }
-	.thumb{
-		width: 150px;
-		margin-right: 10px;
-		position: relative;
-	}
-	.sheet_main{
-		flex: 1;
-		text-align: left;
-		.creator{
-			margin: 10px 0 0 0;
-			*{
-				vertical-align: middle;
-			}
-			.nickname{
-				color: white;
-				/*color: #333;*/
-			}
-			.link{
-				position: relative;
-				.link_icon{
-					position: absolute;
-					right: -24px;
-					top: 50%;
-					transform: translateY(-50%);
-				}
-			}
-		}
-		.tags{
-			margin-top: 10px;
-		}
-	}
-}
-
 .link_icon{
 	color: #ccc;
 }
 
-.play_count{
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-    height: 100%;
-	@include shadow-inset(0, 20px, 20px, rgba(0,0,0,.5));;
-	.headset{
-		position: absolute;
-		right: 5px;
-		top: 5px;
-		font-size: 12px;
-		vertical-align: middle;
-		i{
-			font-size: 11px;
-			vertical-align: middle;
-		}
-	}
-}
+
 </style>

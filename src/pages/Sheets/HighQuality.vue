@@ -1,49 +1,23 @@
 <template>
 	<transition name="fadeInOut">
 		<div>
-			<section class="sheets_list_wrap" ref="sheets_list_wrap">
+			<section class="high_quality_wrap " ref="high_quality_wrap">
 				<div>
-					<section class="highquality_wrap">
-						<div class="detail_head" >
-							<div class="img_bg">
-								<img :src="highquality['coverImgUrl']" class="img_auto">
-								<div class="mask"></div>
-							</div>
-							<div class="thumb">
-								<img :src="highquality['coverImgUrl']" class="img_auto">
-							</div>
-							<div class="sheet_main">
-								<h3 class="link">
-									<mu-icon value="high_quality"></mu-icon>
-									精品歌单
-									<mu-icon value="chevron_right" class="link_icon"/>
-								</h3>
-								<div class="creator text_overflow_1">
-									<h4>{{ highquality.name }}</h4>
-								</div>
-								<div class="copywriter text_overflow_1">
-									<h5>{{ highquality.copywriter }}</h5>
-								</div>
-								
-							</div>
-						</div>
-					</section>
-
 					<section :class="['p-'+(_GLOBAL.config.padding/2) ] " >
 						<mu-grid-list class="gridlist" :padding="_GLOBAL.config.padding/2">
-							<mu-grid-tile v-for="sheet, index in sheets_list" :key="index" @click.native="_select_sheet(sheet.id)" >
+							<mu-grid-tile v-for="quality, index in high_quality" :key="index" @click.native="_select_sheet(quality.id)" >
 								<div slot="default" class=" img_wrap">
-									<img v-lazy="sheet.coverImgUrl" />
+									<img v-lazy="quality.coverImgUrl" />
 									<div class="play_count">
 										<span class="headset">
 											<mu-icon value="headset"></mu-icon>
-											<em>{{ sheet.playCount | _format_count | text_loading}}</em>
+											<em>{{ quality.playCount | _format_count | text_loading}}</em>
 										</span>
 									</div>
 								</div>
-								<span slot="title" class="f-12 text_left">{{ sheet.name | text_loading}}</span>
-								<span slot="subTitle" class="f-12 text_left primary">by <b class="white">{{ sheet.creator['nickname'] | text_loading }}</b></span>
-								<mu-button slot="action" icon @click.stop="_player_sheets(sheet.id)">
+								<span slot="title" class="f-12 text_left">{{ quality.name | text_loading}}</span>
+								<span slot="subTitle" class="f-12 text_left primary">by <b class="white">{{ quality.creator['nickname'] | text_loading }}</b></span>
+								<mu-button slot="action" icon @click.stop="_player_sheets(quality.id)">
 									<mu-icon value="play_circle_outline"></mu-icon>
 								</mu-button>
 							</mu-grid-tile>
@@ -68,12 +42,11 @@
 		data(){
 			return {
 				sheets_tags: [],
-				sheets_list: [],
+				high_quality: [],
 				act: 0,
 
 				act_tag_name: '',
 
-				highquality:{},
 
 			}
 		},
@@ -81,7 +54,6 @@
 		},
 		mounted(){
 			this._get_sheets_hots();
-			this._get_highquality();
 			this.$nextTick(()=>{
 				this._select_sheets_tag();
 			})
@@ -93,9 +65,9 @@
 
 		},
 		methods:{
-			_init_sheets_list(){
+			_init_high_quality(){
 				if(!this.sheet_list_scroll){
-					this.sheet_list_scroll = new BScroll(this.$refs.sheets_list_wrap,{
+					this.sheet_list_scroll = new BScroll(this.$refs.high_quality_wrap,{
 						click: true,
 					})
 				}else{
@@ -109,7 +81,7 @@
 			},
 			_get_highquality(){
 				this.$api.get(this.ApiPath.top.highquality,{
-					limit: 1,
+					limit: 10,
 				},success=>{
 					this.highquality = success.data.playlists[0]
 				})
@@ -121,7 +93,7 @@
 				this.act = 'id' in tag ? tag.id : 0;
 				this.act_tag_name = 'name' in tag ? tag.name : '全部'; 
 
-				this.sheets_list = [];
+				this.high_quality = [];
 				this._load_more();
 				
 			},
@@ -136,19 +108,22 @@
 				console.log(id);
 			},
 			
+
 			// 更多，分页
 			_load_more(){
-				this.$api.get(this.ApiPath.top.playlist,{
-					cat: this.act_tag_name,
+				var _length = this.high_quality.length;
+				console.log(_length)
+				var _before = _length != 0 ? this.high_quality[_length-1].updateTime : 0;
+				this.$api.get(this.ApiPath.top.highquality,{
 					limit: this._GLOBAL.config.limit,
-					offset: this.sheets_list.length
+					before: _before
 				},success=>{
 					var _lists = success.data.playlists;
 					_lists.map( l =>{
-						this.sheets_list.push(l);
+						this.high_quality.push(l);
 					})
 					this.$nextTick(()=>{
-						this._init_sheets_list();
+						this._init_high_quality();
 					})
 
 				},fail=>{
@@ -171,12 +146,8 @@
 @import '@/style/base/_color.scss';
 @import '@/style/base/_mixin.scss';
 
-
-.sheets_hots_container{
-	.sheets_list_wrap{
-		overflow: hidden;
-		height: 100%;
-	}
+.high_quality_wrap{
+	overflow: hidden;
+	height: 100%;
 }
-
 </style>

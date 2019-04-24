@@ -2,19 +2,19 @@
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
     <router-view/>
-	<my-player></my-player>
+    <my-player></my-player>
 
   </div>
 </template>
 
 <script>
-import MyPlayer from '@/components/Player/Index'
-export default {
-  name: 'App',
-  components:{
-  	MyPlayer
-  }
-}
+  import MyPlayer from '@/components/Player/Index'
+  export default {
+    name: 'App',
+    components:{
+     MyPlayer
+   }
+ }
 </script>
 
 <style>
@@ -23,5 +23,6 @@ export default {
   font-weight: 300;
   text-align: center;
   color: #2c3e50;
+  height: calc(100% - 60px);
 }
 </style>
