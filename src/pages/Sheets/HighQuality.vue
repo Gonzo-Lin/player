@@ -1,6 +1,10 @@
 <template>
 	<transition name="fadeInOut">
 		<div>
+            
+            <my-screen></my-screen>
+
+
 			<section class="high_quality_wrap " ref="high_quality_wrap">
 				<div>
 					<section :class="['p-'+(_GLOBAL.config.padding/2) ] " >
@@ -30,12 +34,14 @@
 				</div>
 			</section>
 
+
 		</div>
 	</transition>
 </template>
 
 <script>
 	import BScroll from 'better-scroll'
+	import MyScreen from '@/components/Screen'
 
 	export default{
 		name: "sheets_hots",
@@ -66,12 +72,12 @@
 		},
 		methods:{
 			_init_high_quality(){
-				if(!this.sheet_list_scroll){
-					this.sheet_list_scroll = new BScroll(this.$refs.high_quality_wrap,{
+				if(!this.high_quality_scroll){
+					this.high_quality_scroll = new BScroll(this.$refs.high_quality_wrap,{
 						click: true,
 					})
 				}else{
-					this.sheet_list_scroll.refresh();
+					this.high_quality_scroll.refresh();
 				}
 			},
 			_get_sheets_hots(){
@@ -137,6 +143,7 @@
 			
 		},
 		components:{ 
+            MyScreen
 		}
 
 	}

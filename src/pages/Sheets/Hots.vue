@@ -29,6 +29,12 @@
 						</div>
 					</section>
 
+                    <section class="screen_temp clearfix">
+                        <div class="link f_l ">
+                            <span>全部</span> <mu-icon value="chevron_right" class="link_icon"></mu-icon>
+                        </div>
+                    </section>
+
 					<section :class="['p-'+(_GLOBAL.config.padding/2) ] " >
 						<mu-grid-list class="gridlist" :padding="_GLOBAL.config.padding/2">
 							<mu-grid-tile v-for="sheet, index in sheets_list" :key="index" @click.native="_select_sheet(sheet.id)" >
@@ -53,6 +59,9 @@
 							<mu-button round color="primary" @click="_load_more">Load More</mu-button>
 						</div>
 					</section>
+
+                    <my-screen></my-screen>
+
 				</div>
 			</section>
 
@@ -178,5 +187,13 @@
 		height: 100%;
 	}
 }
-
+.screen_temp{
+    padding: 5px 10px;
+    margin-top: 5px;
+    .link{
+        padding: 2px 3px 2px 10px;
+        border-radius: 20px;
+        border: 1px solid $border_1;
+    }
+}
 </style>

@@ -100,9 +100,16 @@ $line_num_length: 5!default;
 
 .unselect{user-select: none;}
 
-.flex{display: flex;}
+.flex{
+    display: flex;
+    &.align_center{
+        align-items: center;
+    }
+    &.flex_wrap{
+        flex-wrap: wrap;
+    }
+}
 
-.flex-wrap{flex-wrap: wrap;}
 
 
 
@@ -172,7 +179,8 @@ $line_num_length: 5!default;
 	background: rgba(0,0,0,.5);
 }
 
-
+.f_l{ float: left; }
+.f_r{ float: right; }
 .clearfix{
 	&:after {
 		display: block;
@@ -246,11 +254,7 @@ $line_num_length: 5!default;
 				margin-top: 0;
 			}
 		}
-		.link{
-			*{
-				vertical-align: middle;
-			}
-		}
+		
 		.creator{
 			> *{
 				vertical-align: middle;
@@ -278,3 +282,10 @@ $line_num_length: 5!default;
 		}
 	}
 }
+.link{
+    *{
+        vertical-align: middle;
+    }
+}
+
+

@@ -24,6 +24,7 @@ import './style/base/_mixin.scss';
 import './style/base/_reset.scss';
 import './style/base/_base.scss';
 
+import MyScroll from "@/components/MyScroll"
 
 import api from "@/api/index";
 import ApiPath from "@/api/ApiPath"
@@ -41,6 +42,7 @@ Vue.prototype.$api = api
 Vue.prototype.ApiPath = ApiPath
 Vue.prototype._GLOBAL = _GLOBAL
 
+Vue.component('MyScroll', MyScroll);
 
 Vue.use(base);
 Vue.use(MuseUI);

@@ -185,8 +185,10 @@
 			this._show_full_player();
 			if('timer' in this.current_lyric){
 				this.current_lyric.stop();
-			}
-			this._get_lyric();
+            }
+			if('id' in this.current_music_play){
+                this._get_lyric();
+            }
 			this.$nextTick(()=>{
 			})
 		},
