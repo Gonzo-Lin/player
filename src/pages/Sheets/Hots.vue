@@ -4,7 +4,7 @@
 			<section class="sheets_list_wrap" ref="sheets_list_wrap">
 				<div>
 					<section class="highquality_wrap">
-						<div class="detail_head" >
+						<div class="detail_head" @click="$router.push('/sheets/highquality')">
 							<div class="img_bg">
 								<img :src="highquality['coverImgUrl']" class="img_auto">
 								<div class="mask"></div>
@@ -29,11 +29,20 @@
 						</div>
 					</section>
 
-                    <section class="screen_temp clearfix">
-                        <div class="link f_l ">
-                            <span>全部</span> <mu-icon value="chevron_right" class="link_icon"></mu-icon>
+                    <my-screen-list :screen_flag="screen_flag" :act_tag_name="act_tag_name" 
+                        @screen_show="screen_flag=true" @_select_sheets_tag="_select_sheets_tag"></my-screen-list>
+                    <!-- <section class="screen_temp clearfix">
+                        <div class="f_l ">
+                            <mu-button small flat round class="link" @click.native="screen_flag = true">
+                                {{ act_tag_name }}
+                                <mu-icon right value="chevron_right" class="link_icon" ></mu-icon>
+                            </mu-button>
                         </div>
-                    </section>
+                        <div class="f_r mt-4">
+                            <span class="tags_btn" v-for="tag,key in filter_hots_tags" :key="key" 
+                                @click="_select_sheets_tag(tag)">{{tag.name}}</span>
+                        </div>
+                    </section> -->
 
 					<section :class="['p-'+(_GLOBAL.config.padding/2) ] " >
 						<mu-grid-list class="gridlist" :padding="_GLOBAL.config.padding/2">
@@ -59,11 +68,10 @@
 							<mu-button round color="primary" @click="_load_more">Load More</mu-button>
 						</div>
 					</section>
-
-                    <my-screen></my-screen>
-
 				</div>
 			</section>
+
+            <my-screen :screen_flag="screen_flag" :act_tag_name="act_tag_name" @choies_name="_select_sheets_tag" ref="myscreenref"></my-screen>
 
 		</div>
 	</transition>
@@ -71,6 +79,8 @@
 
 <script>
 	import BScroll from 'better-scroll'
+	import MyScreenList from '@/components/Screen/List'
+	import MyScreen from '@/components/Screen'
 
 	export default{
 		name: "sheets_hots",
@@ -78,11 +88,14 @@
 			return {
 				sheets_tags: [],
 				sheets_list: [],
-				act: 0,
 
 				act_tag_name: '',
 
-				highquality:{},
+                highquality:{},
+                
+                screen_flag: !!0,
+
+                tags:{}
 
 			}
 		},
@@ -92,16 +105,28 @@
 			this._get_sheets_hots();
 			this._get_highquality();
 			this.$nextTick(()=>{
-				this._select_sheets_tag();
+                this._select_sheets_tag();
 			})
 		},
 		computed:{
-			
+			filter_hots_tags(){
+                var sheets_tags = this.sheets_tags.sort(this._sort_by);
+
+                return sheets_tags.filter((tags,key)=>{
+                    if( key < 3){
+                        console.log(tags)
+                        return tags;
+                    }
+                })
+            }
 		},
 		watch:{
 
 		},
 		methods:{
+            _sort_by(a,b){
+                return b.usedCount - a.usedCount;
+            },
 			_init_sheets_list(){
 				if(!this.sheet_list_scroll){
 					this.sheet_list_scroll = new BScroll(this.$refs.sheets_list_wrap,{
@@ -124,10 +149,8 @@
 				})
 			},
 			_select_sheets_tag(tag){
-
 				tag = tag || {};
 
-				this.act = 'id' in tag ? tag.id : 0;
 				this.act_tag_name = 'name' in tag ? tag.name : '全部'; 
 
 				this.sheets_list = [];
@@ -163,7 +186,8 @@
 				},fail=>{
 					console.log(fail)
 				})
-			},
+            },
+
 
 			
 		},
@@ -171,6 +195,7 @@
 			
 		},
 		components:{ 
+            MyScreen,MyScreenList
 		}
 
 	}
@@ -187,13 +212,6 @@
 		height: 100%;
 	}
 }
-.screen_temp{
-    padding: 5px 10px;
-    margin-top: 5px;
-    .link{
-        padding: 2px 3px 2px 10px;
-        border-radius: 20px;
-        border: 1px solid $border_1;
-    }
-}
+
+
 </style>

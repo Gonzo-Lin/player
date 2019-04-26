@@ -7,7 +7,7 @@
 				<mu-icon value="chevron_left"></mu-icon>
 			</mu-button>
 			<!-- 歌曲名 -->
-			歌单
+			{{$route.name}}
 			<!-- {{ current_music_play.name }} -->
 			<!-- 歌曲名 -->
 			<mu-button flat slot="right">
@@ -39,7 +39,7 @@
 			
 		},
 		watch:{
-
+            
 		},
 		methods:{
 			
@@ -54,6 +54,7 @@
 </script>
 
 <style lang="scss" scoped>
+@import '@/style/base/_mixin.scss';
 .app_bar{
 	width: 100%;
 	color: white;
@@ -61,7 +62,7 @@
 .sheets_hots_wrap{
 	height: 100%;
 	.sheets_hots_container{
-		height: calc(100% - 60px);
+		height: calc(100% - 56px);
 		overflow: hidden;
 		> *{
 			height: 100%

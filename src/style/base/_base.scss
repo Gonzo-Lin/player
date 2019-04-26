@@ -12,6 +12,9 @@ $_length: 35 !default;
 $_default_px: 1px !default;
 
 @for $margin_num from 0 through $_length{
+	.m-#{$margin_num} {
+		margin: $margin_num * $_default_px;
+	}
 	.mt-#{$margin_num} {
 		margin-top: $margin_num * $_default_px;
 	}
@@ -23,9 +26,9 @@ $_default_px: 1px !default;
 	}
 	.mr-#{$margin_num} {
 		margin-right: $margin_num * $_default_px;
-	}
-	.m-#{$margin_num} {
-		margin: $margin_num * $_default_px;
+    }
+    .p-#{$margin_num} {
+		padding: $margin_num * $_default_px;
 	}
 	.pt-#{$margin_num} {
 		padding-top: $margin_num * $_default_px;
@@ -38,9 +41,6 @@ $_default_px: 1px !default;
 	}
 	.pr-#{$margin_num} {
 		padding-right: $margin_num * $_default_px;
-	}
-	.p-#{$margin_num} {
-		padding: $margin_num * $_default_px;
 	}
 	.z-#{$margin_num} {
 		z-index: $margin_num;
@@ -166,7 +166,7 @@ $line_num_length: 5!default;
 	overflow: hidden;
 }
 
-.cricle{
+.circle{
 	border-radius: 50%;
 }
 

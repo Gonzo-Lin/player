@@ -2,12 +2,12 @@
 	<transition name="fadeInOut">
 		<div>
             
-            <my-screen></my-screen>
-
+            <my-screen-list :screen_flag="screen_flag" :act_tag_name="act_tag_name" 
+                @screen_show="screen_flag=true" @_select_sheets_tag="_select_sheets_tag"></my-screen-list>
 
 			<section class="high_quality_wrap " ref="high_quality_wrap">
 				<div>
-					<section :class="['p-'+(_GLOBAL.config.padding/2) ] " >
+					<section :class="['p-'+(_GLOBAL.config.padding/2) , 'pt-0' ] " >
 						<mu-grid-list class="gridlist" :padding="_GLOBAL.config.padding/2">
 							<mu-grid-tile v-for="quality, index in high_quality" :key="index" @click.native="_select_sheet(quality.id)" >
 								<div slot="default" class=" img_wrap">
@@ -34,6 +34,7 @@
 				</div>
 			</section>
 
+            <my-screen :screen_flag="screen_flag" :act_tag_name="act_tag_name" @choies_name="_select_sheets_tag" ref="myscreenref"></my-screen>
 
 		</div>
 	</transition>
@@ -42,6 +43,7 @@
 <script>
 	import BScroll from 'better-scroll'
 	import MyScreen from '@/components/Screen'
+	import MyScreenList from '@/components/Screen/List'
 
 	export default{
 		name: "sheets_hots",
@@ -49,17 +51,16 @@
 			return {
 				sheets_tags: [],
 				high_quality: [],
-				act: 0,
 
 				act_tag_name: '',
 
+                screen_flag: !!0,
 
 			}
 		},
 		created(){
 		},
 		mounted(){
-			this._get_sheets_hots();
 			this.$nextTick(()=>{
 				this._select_sheets_tag();
 			})
@@ -79,11 +80,6 @@
 				}else{
 					this.high_quality_scroll.refresh();
 				}
-			},
-			_get_sheets_hots(){
-				this.$api.get(this.ApiPath.sheets.getHotSheet,{},success=>{
-					this.sheets_tags = success.data.tags
-				})
 			},
 			_get_highquality(){
 				this.$api.get(this.ApiPath.top.highquality,{
@@ -118,9 +114,9 @@
 			// 更多，分页
 			_load_more(){
 				var _length = this.high_quality.length;
-				console.log(_length)
 				var _before = _length != 0 ? this.high_quality[_length-1].updateTime : 0;
 				this.$api.get(this.ApiPath.top.highquality,{
+                    cat: this.act_tag_name,
 					limit: this._GLOBAL.config.limit,
 					before: _before
 				},success=>{
@@ -143,7 +139,7 @@
 			
 		},
 		components:{ 
-            MyScreen
+            MyScreen,MyScreenList
 		}
 
 	}
@@ -155,6 +151,25 @@
 
 .high_quality_wrap{
 	overflow: hidden;
-	height: 100%;
+	height: calc(100% - 40px);
+}
+.sheets_hots_container{
+    .screen_temp{
+        margin-top: 0;
+        padding: 5px 10px;
+        position: relative;
+        &:before{
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -15px;
+            height: 15px;
+            z-index: 99;
+            // background-color: $red;
+            @include shadow-inset(0,12px,(12px -8px),rgba(0,0,0,.5));
+
+        }
+    }
 }
 </style>

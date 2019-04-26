@@ -1,8 +1,8 @@
 <template>
     <transition name="fade_top">
-        <div class="screen_wrap" v-show="hide">
+        <div class="screen_wrap" v-show="screen_flag">
             <mu-appbar class="app_bar" color="red" z-depth="0">
-                <mu-button icon slot="left" @click.native="hide = false">
+                <mu-button icon slot="left" @click.native="hide_screen">
                     <mu-icon value="close"></mu-icon>
                 </mu-button>
                 <!-- 歌曲名 -->
@@ -16,7 +16,7 @@
             <section class="screen_list_wrap">
                 <my-scroll :data="catlist">
                     <div class="all_sheet">
-                        <div :class="['all_btn',{checked: checked_cat == 0 }]" @click="checked_cat=0">
+                        <div :class="['all_btn',{checked: act_tag_name == '全部' }]" @click="choice_cat({ name:'全部'})">
                             全部歌单
                         </div>
                     </div>
@@ -28,9 +28,9 @@
                                     <p v-cloak class="mt-5">{{ categories[index] | text_loading}}</p>
                                 </div>
                             </li>
-                            <li v-for="s,k in cat" @click="checked_cat=(index+'-'+k)"
+                            <li v-for="s,k in cat" @click="choice_cat({ name:s.name})"
                                 :class="[
-                                    {checked: checked_cat == (index+'-'+k) },
+                                    {checked: act_tag_name == s.name },
                                     cat.length < 7 && k>(cat.length-4) ? 'last' : ((cat.length-6)%4 != 0 && k>(cat.length-((cat.length-6)%4+1)) ? 'last' : '')
                                 ]">
                                 <div v-cloak >
@@ -53,7 +53,14 @@
 
 
 	export default{
-		name: "my_screen",
+        name: "my_screen",
+        props:{
+            screen_flag: false,
+            act_tag_name:{
+                type: String,
+                value: '',
+            }
+        },
 		data(){
 			return {
                 catlist:[],
@@ -66,7 +73,7 @@
 
                 icon: ['language','style','flight_takeoff','sentiment_satisfied','dashboard'],
 
-                checked_cat: 0,
+                checked_cat: '全部',
 
                 hide: true
 			}
@@ -99,6 +106,15 @@
 
                     })
                 })
+            },
+            hide_screen(){
+                this.$parent.screen_flag = false;
+            },
+            choice_cat(_data){
+                this.$parent.act_tag_name = _data.name;
+                this.$emit('choies_name',_data);
+                this.hide_screen();
+                // console.log(_data)
             }
 		},
 		filters:{
